@@ -1,5 +1,5 @@
 import HandCoins from "../../assets/HandCoins.svg";
-// import BriefcaseDollar from "../../assets/briefcase-dollar.svg";
+import BriefcaseDollar from "../../assets/briefcase-dollar.svg";
 // import BookOpen from "../../assets/BookOpen.svg";
 // import Handshake from "../../assets/Handshake.svg"
 // import Kanban from "../../assets/Kanban.svg"
@@ -12,11 +12,11 @@ export const NavigationItems = [
     icon: HandCoins,
     tabUrl: "/dashboard",
   },
-  // {
-  //   tab: "Earn",
-  // icon: HandCoins,
-  // tabUrl: "/dashboard/earn",
-  // },
+  {
+    tab: "Campaign",
+    icon: BriefcaseDollar,
+    tabUrl: "/dashboard/campaign",
+  },
   // {
   //   tab: "Learn",
   //   icon: BookOpen,
