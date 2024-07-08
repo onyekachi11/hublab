@@ -1,17 +1,20 @@
 "use client";
-import { useSearchParams, permanentRedirect, redirect } from "next/navigation";
+import Action from "@/components/campaignComponents/action";
+import Draft from "@/components/campaignComponents/draft";
+import Reward from "@/components/campaignComponents/rewards";
+import { useSearchParams } from "next/navigation";
 
-const Campaign = () => {
+const CreateCampaign = () => {
   const searchParams = useSearchParams();
-  const route = searchParams.get("route");
+  const route = searchParams.get("route") || "action";
 
-  return (
-    <>
-      {route === "action" && <Action />}
-      {route === "reward" && <Reward />}
-      {route === "preview" && <Preview />}
-    </>
-  );
+  const components = {
+    action: <Action />,
+    reward: <Reward />,
+    draft: <Draft />,
+  };
+
+  return components[route] || <Action />;
 };
 
-export default Campaign;
+export default CreateCampaign;

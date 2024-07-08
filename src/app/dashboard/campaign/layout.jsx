@@ -2,10 +2,13 @@
 import { Button } from "@/components";
 import { useSearchParams, permanentRedirect, redirect } from "next/navigation";
 import { SearchNormal1, Notification } from "iconsax-react";
+import TabButton from "@/components/TabButton";
 
 const layout = ({ children }) => {
   const searchParams = useSearchParams();
   const tab = searchParams.get("tab");
+  // const route = searchParams.get("route");
+
   return (
     <section className="">
       <div className="bg-white z-50 sticky top-0 flex items-center justify-between py-4 px-6">
@@ -33,83 +36,39 @@ const layout = ({ children }) => {
       </div>
 
       <div className="flex gap-10 items-center justify-center">
-        <Button
-          name="start"
-          href="/campaign?tab=start"
-          className={`${
-            tab === "start" ? "bg-white text-primary" : "bg-transparent"
-          } px-8 py-1 border border-white rounded-[10px] text-[24px]`}
-          shade={
-            tab === "start" &&
-            "left-[4px] bg-[#0D0E32] border-none rounded-[10px]"
-          }
+        <TabButton
+          name="Start"
+          href="/dashboard/campaign?tab=start"
+          isActive={tab === "start"}
         />
-        <Button
-          name="details"
+        <TabButton
+          name="Details"
           href="/campaign?tab=details"
-          className={`${
-            tab === "details"
-              ? "bg-white text-primary"
-              : "bg-transparent border-red-500"
-          } px-8 py-1 border border-white rounded-[10px] text-[24px]`}
-          shade={
-            tab === "inputs" &&
-            "left-[4px] bg-[#0D0E32] border-none rounded-[10px]"
-          }
+          isActive={tab === "details"}
         />
-        <Button
-          name="Summary"
-          href="/campaign?tab=summary"
-          className={`${
-            tab === "summary"
-              ? "bg-white text-primary"
-              : "bg-transparent border-red-500"
-          }  py-1 border border-white rounded-[10px] text-[24px]`}
-          shade={
-            tab === "rewards" &&
-            "left-[4px] bg-[#0D0E32] border-none rounded-[10px]"
-          }
+        <TabButton
+          name="summary"
+          href="/dashboard/campaign?tab=ongoing"
+          isActive={tab === "ongoing"}
         />
       </div>
-      <div className="flex gap-10 items-center justify-center">
-        <Button
-          name="start"
-          href="/createCampaign?tab=action"
-          className={`${
-            tab === "start" ? "bg-white text-primary" : "bg-transparent"
-          } px-8 py-1 border border-white rounded-[10px] text-[24px]`}
-          shade={
-            tab === "start" &&
-            "left-[4px] bg-[#0D0E32] border-none rounded-[10px]"
-          }
+      {/* <div className="flex gap-10 items-center justify-center">
+        <TabButton
+          name="Acjsbdhtion"
+          href="/createCampaign?route=action"
+          isActive={route === 'action'}
         />
-        <Button
-          name="details"
-          href="/createCampaign?tab=reward"
-          className={`${
-            tab === "details"
-              ? "bg-white text-primary"
-              : "bg-transparent border-red-500"
-          } px-8 py-1 border border-white rounded-[10px] text-[24px]`}
-          shade={
-            tab === "inputs" &&
-            "left-[4px] bg-[#0D0E32] border-none rounded-[10px]"
-          }
+        <TabButton
+          name="Rewhjdsard"
+          href="/createCampaign?route=reward"
+          isActive={route === 'reward'}
         />
-        <Button
-          name="Summary"
-          href="/createCampaign?tab=preview"
-          className={`${
-            tab === "summary"
-              ? "bg-white text-primary"
-              : "bg-transparent border-red-500"
-          }  py-1 border border-white rounded-[10px] text-[24px]`}
-          shade={
-            tab === "rewards" &&
-            "left-[4px] bg-[#0D0E32] border-none rounded-[10px]"
-          }
+        <TabButton
+          name="Drhdsbkaft"
+          href="/createCampaign?route=draft"
+          isActive={route === 'draft'}
         />
-      </div>
+      </div> */}
 
       <div>{children}</div>
     </section>

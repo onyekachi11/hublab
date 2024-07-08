@@ -8,7 +8,6 @@ import SliderSection from "./landingComponents/sliderSection";
 import HowToEarnCards from "./landingComponents/howToEarnCards";
 import VideoPlayer from "./video";
 import PointsModal from "./modals/pointsModal";
-import InputOptions from "./campaignComponents/inputOptions";
 export {
   NavBar,
   Button,
@@ -19,6 +18,5 @@ export {
   LandingPageHero,
   SliderSection,
   VideoPlayer,
-  InputOptions,
   PointsModal,
 };

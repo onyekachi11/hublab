@@ -1,15 +1,18 @@
 "use client";
-import { useSearchParams, permanentRedirect, redirect } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import AllCampaign from "@/components/campaignComponents/allCampaigns";
+import OnGoingCampaign from "@/components/campaignComponents/onGoingCampaign";
+import Details from "@/components/campaignComponents/details";
 
 const Campaign = () => {
   const searchParams = useSearchParams();
-  const tab = searchParams.get("tab");
+  const tab = searchParams.get("tab") || "start";
 
   return (
     <>
-      {tab === "start" && <Start />}
+      {tab === "start" && <AllCampaign />}
       {tab === "details" && <Details />}
-      {tab === "summary" && <Summary />}
+      {tab === "ongoing" && <OnGoingCampaign />}
     </>
   );
 };

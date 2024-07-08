@@ -4,50 +4,47 @@ import { Button } from "@/components";
 import { useSearchParams, permanentRedirect, redirect } from "next/navigation";
 import Image from "next/image";
 import logo from "../../assets/Logo.svg";
-import Link from 'next/link';
-import campaignBanner from "../../assets/campaignBanner.svg"
+import Link from "next/link";
+import campaignBanner from "../../assets/campaignBanner.svg";
 import { useAccount } from "@particle-network/connect-react-ui";
 import WalletLogin from "@/components/walletLogin";
 import LogoutButton from "@/components/logout";
-import {useDispatch} from 'react-redux'
+import { useDispatch } from "react-redux";
 import { setUserId } from "@/store/slices/statesSlice";
-
 
 const layout = ({ children }) => {
   const searchParams = useSearchParams();
   const tab = searchParams.get("tab");
   const account = useAccount();
-  const dispatch = useDispatch()
-  
-  useEffect(()=>{
-    dispatch(setUserId(account))
-  },[account])
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setUserId(account));
+  }, [account]);
 
   return (
     <div className="relative">
       <div className="bg-primary flex justify-between items-center px-5 py-3">
-      <Link href="/dashboard">
-        <Image src={logo} alt="Verxio Logo" className="w-[50px]" />
-    </Link>
+        <Link href="/dashboard">
+          <Image src={logo} alt="Verxio Logo" className="w-[50px]" />
+        </Link>
         <div className="flex items-center gap-3">
           {/* <Button name="start earning" /> */}
           {account ? <LogoutButton /> : <WalletLogin />}
           {/* <WalletLogin/> */}
         </div>
       </div>
-      <div 
-      className="px-10 py-8 relativ">
-        <div className="flex flex-col gap-10 justify-center items-center border rounded-lg  py-6 mb-10 "
+      <div className="px-10 py-8 relativ">
+        <div
+          className="flex flex-col gap-10 justify-center items-center border rounded-lg  py-6 mb-10 "
           style={{
             backgroundImage: `url(${campaignBanner.src})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
           }}
         >
-          <h2 className="text-4xl text-white font-extrabold">
-            CREATE PRODUCT
-          </h2>
+          <h2 className="text-4xl text-white font-extrabold">CREATE PRODUCT</h2>
           <div className="flex gap-10 items-center justify-center">
             <Button
               name="start"
@@ -88,9 +85,7 @@ const layout = ({ children }) => {
             />
           </div>
         </div>
-        <div className="border rounded-lg p-6">
-          {children}
-        </div>
+        <div className="border rounded-lg p-6">{children}</div>
       </div>
     </div>
   );
