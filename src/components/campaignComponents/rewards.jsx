@@ -1,7 +1,7 @@
-const Reward = () => (
+const Rewards = () => (
   <div className="border border-red-500 w-full p-2 rounded-lg">
-    Welcome to Reward page
+    Welcome to Rewards page
   </div>
 );
 
-export default Reward;
+export default Rewards;
