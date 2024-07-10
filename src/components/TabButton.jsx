@@ -7,7 +7,7 @@ const TabButton = ({ name, href, isActive }) => (
       isActive
         ? "bg-[#DFDFF7] shadow text-[#2C30AA] border-b border-[#2C30AA] font-bold bg"
         : "bg-transparent"
-    } px-8 py-2`}
+    } px-8 py-2 hover:text-[#2C30AA] hover:border-b hover:border-[#2C30AA] transition duration-300 ease-out`}
   >
     {name}
   </Link>
