@@ -6,7 +6,7 @@ import Image from "next/image";
 import logo from "../../assets/Logo.svg";
 import Link from "next/link";
 import campaignBanner from "../../assets/campaignBanner.svg";
-import { useAccount } from "@particle-network/connect-react-ui";
+// import { useAccount } from "@particle-network/connect-react-ui";
 import WalletLogin from "@/components/walletLogin";
 import LogoutButton from "@/components/logout";
 import { useDispatch } from "react-redux";
@@ -15,12 +15,12 @@ import { setUserId } from "@/store/slices/statesSlice";
 const layout = ({ children }) => {
   const searchParams = useSearchParams();
   const tab = searchParams.get("tab");
-  const account = useAccount();
+  // const account = useAccount();
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(setUserId(account));
-  }, [account]);
+  // useEffect(() => {
+  //   dispatch(setUserId(account));
+  // }, [account]);
 
   return (
     <div className="relative">

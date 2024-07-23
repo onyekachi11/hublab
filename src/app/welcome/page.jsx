@@ -1,46 +1,45 @@
 "use client";
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Button, VideoPlayer } from "@/components";
-import { ConnectButton } from "@particle-network/connect-react-ui";
-import { useAccount } from "@particle-network/connect-react-ui";
-import { getProfile } from "@/store/slices/profileSlice";
+// import { getProfile } from "@/store/slices/profileSlice";
 import { toast } from "react-toastify";
-import {
-  setUserId,
-  setUserProfile,
-  setEdit,
-} from "@/store/slices/statesSlice";
+import { setUserId, setUserProfile, setEdit } from "@/store/slices/statesSlice";
 import { useSelector, useDispatch } from "react-redux";
+import {
+  BrowserWalletConnector,
+  persistentConnectorType,
+  useConnect,
+  useConnection,
+  useGrpcClient,
+} from "@concordium/react-components";
+import { BROWSER_WALLET } from "../../config.js";
+import { detectConcordiumProvider } from "@concordium/browser-wallet-api-helpers";
 
+const page = (props) => {
+  const {
+    setActiveConnectorType,
+    setActiveConnector,
+    activeConnector,
+    connectedAccounts,
+    genesisHashes,
+    network,
+  } = props;
 
-const page = () => {
-  const router = useRouter();
-  const account = useAccount();
-  const dispatch = useDispatch();
+  const [account, setAccount] = useState("");
+  // const rpc = useGrpcClient(network);
+  // console.log(rpc);
 
-  const status = useSelector((state) => state.profile.profile.status);
-
-  const getUserProfile = async () => {
-    try {
-      const response = await dispatch(getProfile({ id: account }));
-      if (response.payload.success === true) {
-        dispatch(setUserId(account));
-        dispatch(setUserProfile(response?.payload.profile));
-        router.push("/dashboard");
-        toast.success(response?.payload.message);
-      } else {
-        toast.info("Create a new profile");
-        dispatch(setEdit(true));
-        dispatch(setUserId(account));
-        router.push("/dashboard/profile");
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
+  const handleConnect = useCallback(
+    () =>
+      detectConcordiumProvider()
+        .then((provider) => provider.connect())
+        .then(setAccount),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
+  console.log(account);
 
   return (
     <section className="w-screen h-screen flex flex-col-reverse md:flex-row items-center">
@@ -66,13 +65,22 @@ const page = () => {
             <br className="hidden md:block" /> and get this thing rolling....
           </p>
         </div>
-        <ConnectButton />
+        {/* <ConnectButton /> */}
+
         {account && (
           <Button
             name="Continue"
-            isLoading={status === "loading"}
+            // isLoading={status === "loading"}
             className={"px-24"}
-            onClick={() => getUserProfile()}
+            // onClick={() => getUserProfile()}
+          />
+        )}
+        {!account && (
+          <Button
+            name="Connect"
+            // isLoading={status === "loading"}
+            className={"px-24"}
+            onClick={handleConnect}
           />
         )}
       </div>
@@ -81,4 +89,3 @@ const page = () => {
 };
 
 export default page;
-

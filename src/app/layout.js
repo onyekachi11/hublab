@@ -1,12 +1,11 @@
 import { Inter, Roboto_Slab } from "next/font/google";
 import "./globals.css";
-import PageConnectKit from "@/context/PageConnectKit";
 import ReduxProvider from "@/providers/reduxProvider";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { NavProvider } from "@/context/nav_context";
 import DatePickerProvider from "@/providers/datePickerProvider";
-
+import ConnectWalletProvider from "@/providers/connectWalletProvider";
 const roboto_Slab = Roboto_Slab({ subsets: ["latin"] });
 
 export const metadata = {
@@ -23,7 +22,8 @@ export default function RootLayout({ children }) {
         <DatePickerProvider>
           <ReduxProvider>
             <NavProvider>
-              <PageConnectKit>{children}</PageConnectKit>
+              <ConnectWalletProvider>{children}</ConnectWalletProvider>
+              {/* {children} */}
             </NavProvider>
           </ReduxProvider>
           <ToastContainer />

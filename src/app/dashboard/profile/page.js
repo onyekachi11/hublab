@@ -22,7 +22,7 @@ import { claim, getProfile } from "@/store/slices/profileSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { generateAvatarUrl } from "@/utils/verxioAvatar";
-import { useAccount } from "@particle-network/connect-react-ui";
+// import { useAccount } from "@particle-network/connect-react-ui";
 import { root } from "@/store/store";
 import Link from "next/link";
 import mintVerxioTokens from "@/utils/claimVerxioToken";
@@ -36,7 +36,7 @@ const Page = () => {
   const [loading, setLoading] = useState(false);
   const [balance, setBalance] = useState(0);
 
-  const account = useAccount();
+  // const account = useAccount();
   const dispatch = useDispatch();
 
   const userProfile = useSelector((state) => state.generalStates.userProfile);

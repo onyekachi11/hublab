@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Image from "next/image";
 import logo from "../../assets/Logo.svg";
-import { useAccount } from "@particle-network/connect-react-ui";
+// import { useAccount } from "@particle-network/connect-react-ui";
 import { setUserId } from "@/store/slices/statesSlice";
 import { root } from "@/store/store";
 
@@ -16,39 +16,39 @@ const page = () => {
   const [campaign, setCampaign] = useState([]);
 
   const dispatch = useDispatch();
-  const account = useAccount();
+  // const account = useAccount();
 
-  const userId = useSelector((state) => state.generalStates.userId);
+  // const userId = useSelector((state) => state.generalStates.userId);
 
-  console.log(account);
+  // console.log(account);
 
-  useEffect(() => {
-    dispatch(setUserId(account));
-  }, [account]);
+  // useEffect(() => {
+  //   dispatch(setUserId(account));
+  // }, [account]);
 
-  useEffect(() => {
-    getUsersCampaign();
-  }, []);
+  // useEffect(() => {
+  //   getUsersCampaign();
+  // }, []);
 
   console.log(campaign);
 
-  const getUsersCampaign = async () => {
-    try {
-      const response = await dispatch(
-        getUserCampaigns({ id: userId || account })
-      );
-      if (response?.payload?.success === true) {
-        setCampaign(response?.payload?.capmaign);
-        toast.success(response?.payload?.message);
-      } else if (userId === undefined ) {
-        toast.info("Connect your wallet to access campaigns");
-      } else {
-        toast.error("Error:: failed to load");
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // const getUsersCampaign = async () => {
+  //   try {
+  //     const response = await dispatch(
+  //       getUserCampaigns({ id: userId || account })
+  //     );
+  //     if (response?.payload?.success === true) {
+  //       setCampaign(response?.payload?.capmaign);
+  //       toast.success(response?.payload?.message);
+  //     } else if (userId === undefined ) {
+  //       toast.info("Connect your wallet to access campaigns");
+  //     } else {
+  //       toast.error("Error:: failed to load");
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   return (
     <div>

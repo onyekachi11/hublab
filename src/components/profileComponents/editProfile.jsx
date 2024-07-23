@@ -17,38 +17,38 @@ import { toast } from "react-toastify";
 import Error from "../../components/formikerror";
 import Button from "../Button";
 import { generateAvatarUrl } from "@/utils/verxioAvatar";
-import { useAccount } from "@particle-network/connect-react-ui";
+// import { useAccount } from "@particle-network/connect-react-ui";
 import { root } from "@/store/store";
 
 const EditProfile = ({ setEdit, getUserProfile }) => {
   const [selectedImage, setSelectedImage] = useState("");
   const [selectedOption, setSelectedOption] = useState([]);
-  const account = useAccount();
+  // const account = useAccount();
   const fileInputRef = useRef(null);
 
   const dispatch = useDispatch();
 
-  const userProfile = useSelector((state) => state.generalStates.userProfile);
-  const edit = useSelector((state) => state.generalStates.edit);
-  const userId = useSelector((state) => state.generalStates.userId);
+  // const userProfile = useSelector((state) => state.generalStates.userProfile);
+  // const edit = useSelector((state) => state.generalStates.edit);
+  // const userId = useSelector((state) => state.generalStates.userId);
 
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
+  // const handleImageChange = (event) => {
+  //   const file = event.target.files[0];
 
-    if (file) {
-      const reader = new FileReader();
+  //   if (file) {
+  //     const reader = new FileReader();
 
-      reader.onloadend = () => {
-        setSelectedImage(reader.result);
-      };
+  //     reader.onloadend = () => {
+  //       setSelectedImage(reader.result);
+  //     };
 
-      reader.readAsDataURL(file);
-    }
-  };
+  //     reader.readAsDataURL(file);
+  //   }
+  // };
 
-  const handleUploadButtonClick = () => {
-    fileInputRef.current.click();
-  };
+  // const handleUploadButtonClick = () => {
+  //   fileInputRef.current.click();
+  // };
 
   const initialValue = {
     firstName: userProfile?.firstName || "",
@@ -101,43 +101,43 @@ const EditProfile = ({ setEdit, getUserProfile }) => {
     { value: "bounty", label: "Bounty" },
   ];
 
-  const backendSelectedOptions = userProfile?.interests?.map((item) => ({
-    value: item.toLowerCase(),
-    label: item,
-  }));
+  // const backendSelectedOptions = userProfile?.interests?.map((item) => ({
+  //   value: item.toLowerCase(),
+  //   label: item,
+  // }));
 
-  console.log(backendSelectedOptions);
+  // console.log(backendSelectedOptions);
 
-  const createNewProfile = async (values) => {
-    try {
-      const response = await dispatch(
-        createProfile({
-          data: {
-            firstName: values.firstName,
-            lastName: values.lastName,
-            email: values.email,
-            bio: values.bio,
-            interests: values.interests,
-            socials: values.socials,
-          },
-          id: userId,
-        })
-      );
-      if (response.payload.success === true) {
-        getUserProfile();
-        toast.success(response.payload.message);
-        dispatch(setEdit(false));
-        console.log(response);
-      } else {
-        toast.error(response.payload.message);
-        console.log(response);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // const createNewProfile = async (values) => {
+  //   try {
+  //     const response = await dispatch(
+  //       createProfile({
+  //         data: {
+  //           firstName: values.firstName,
+  //           lastName: values.lastName,
+  //           email: values.email,
+  //           bio: values.bio,
+  //           interests: values.interests,
+  //           socials: values.socials,
+  //         },
+  //         id: userId,
+  //       })
+  //     );
+  //     if (response.payload.success === true) {
+  //       getUserProfile();
+  //       toast.success(response.payload.message);
+  //       dispatch(setEdit(false));
+  //       console.log(response);
+  //     } else {
+  //       toast.error(response.payload.message);
+  //       console.log(response);
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
-  const addStatus = useSelector((state) => state.profile.profile.status);
+  // const addStatus = useSelector((state) => state.profile.profile.status);
 
   return (
     <div>
