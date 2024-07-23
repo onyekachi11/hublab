@@ -16,11 +16,11 @@ const CreateCampaign = () => {
           href="/dashboard/campaign/create_campaign?route=details"
           isActive={route === "details"}
         />
-        <TabButton
+        {/* <TabButton
           name="Action"
           href="/dashboard/campaign/create_campaign?route=action"
           isActive={route === "action"}
-        />
+        /> */}
         <TabButton
           name="Rewards"
           href="/dashboard/campaign/create_campaign?route=rewards"
@@ -29,7 +29,7 @@ const CreateCampaign = () => {
       </div>
 
       {route === "details" && <Details />}
-      {route === "action" && <Action />}
+      {/* {route === "action" && <Action />} */}
       {route === "rewards" && <Rewards />}
     </>
   );

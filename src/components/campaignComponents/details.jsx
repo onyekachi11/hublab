@@ -44,10 +44,11 @@ const Details = () => {
   const handleUploadButtonClick = () => {
     fileInputRef.current.click();
   };
+
   return (
     <section className="w-full">
       <div
-        className="rounded-lg p-3 mb-10 "
+        className="rounded-lg p-5 mb-10  "
         style={{
           backgroundImage: `url(${campaignBanner.src})`,
           backgroundSize: "cover",
@@ -55,10 +56,10 @@ const Details = () => {
           backgroundRepeat: "no-repeat",
         }}
       >
-        <h2 className="font-semibold text-lg mb-2 text-[#FBFBFE]">
+        <h2 className="font-semibold text-3xl mb-2 text-[#FBFBFE]">
           General Information
         </h2>
-        <p className="font-normal text-sm text-[#FBFBFE]">
+        <p className="font-normal text-lg text-[#FBFBFE]">
           Basic Information about your campaign
         </p>
       </div>
@@ -66,16 +67,31 @@ const Details = () => {
       <Formik onSubmit={() => {}}>
         {({ values, setFieldValue }) => (
           <Form className="flex flex-col gap-8">
-            <div>
-              <p className="font-medium text-[#303036] mb-3">Campaign Title</p>
-              <Field
-                className="border outline-none bg-transparent text-[#484851] font-normal text-[14px] rounded-lg w-full px-5 py-3 border-[#60606C]"
-                name="title"
-                placeholder="e.g Groupy share token contest"
-              />
+            <div className="flex gap-4 flex-col">
+              <div>
+                <p className="font-medium text-[#303036] mb-3">
+                  Campaign Title
+                </p>
+                <Field
+                  className="border outline-none bg-transparent text-[#484851] font-normal text-[14px] rounded-lg w-full px-5 py-3 border-[#60606C]"
+                  name="title"
+                  placeholder="e.g Groupy share token contest"
+                />
+              </div>
+              <div>
+                <p className="font-medium text-[#303036] mb-3">
+                  Campaign Description
+                </p>
+                <Field
+                  className="border outline-none bg-transparent text-[#484851] font-normal text-[14px] rounded-lg w-full px-5 py-3 border-[#60606C]"
+                  name="description"
+                  as="textArea"
+                  placeholder="desribe your campaign"
+                />
+              </div>
             </div>
 
-            <div className="">
+            {/* <div className="">
               <p className="font-medium text-[#303036] mb-3">Display Banner</p>
 
               <div className=" rounded-lg border border-primary border-dashed bg-[#E7E7F9]">
@@ -116,13 +132,13 @@ const Details = () => {
                 <p>PNG / SVG / JPEG / 120*804</p>
                 <p>Max 24MB</p>
               </div>
-            </div>
+            </div> */}
 
             <section>
               <p className="font-bold text-[18px] text-[#303036] my-3">
                 Participants Specification
               </p>
-              <div className="flex flex-col items-start gap-3 my-5">
+              {/* <div className="flex flex-col items-start gap-3 my-5">
                 <p className="font-medium text-[#303036]">
                   Participants Status
                 </p>
@@ -140,9 +156,9 @@ const Details = () => {
                   name="title"
                   placeholder="Others, please specify"
                 />
-              </div>
+              </div> */}
 
-              <div className="space-y-3 my-5">
+              {/* <div className="space-y-3 my-5">
                 <p className="font-medium text-[#303036]">Participant Level</p>
                 <select
                   className="border outline-none bg-transparent font-normal text-[14px] rounded-lg w-full px-5 py-3 border-[#0D0E32]"
@@ -153,7 +169,7 @@ const Details = () => {
                   <option value="">Professional </option>
                   <option value="">Master</option>
                 </select>
-              </div>
+              </div> */}
               <div className="space-y-3 my-5">
                 <p className="font-medium text-[#303036]">Nationality</p>
                 <select

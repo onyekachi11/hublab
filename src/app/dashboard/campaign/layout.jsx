@@ -1,8 +1,11 @@
 "use client";
 import { Button } from "@/components";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { SearchNormal1, Notification } from "iconsax-react";
 
 const layout = ({ children }) => {
+  const router = useRouter();
   return (
     <section>
       <div className="bg-white z-50 sticky top-0 flex items-center justify-between px-8 py-3 mb-3">
@@ -25,7 +28,12 @@ const layout = ({ children }) => {
             <p className="text-sm font-normal text-[#787887]">Notification</p>
           </blockquote>
 
-          <Button name="Create Campaign" />
+          <Button
+            name="Create Campaign"
+            onClick={() => {
+              router.push("/dashboard/campaign/create_campaign?route=details");
+            }}
+          />
         </div>
       </div>
 

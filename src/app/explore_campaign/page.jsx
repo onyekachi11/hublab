@@ -1,6 +1,6 @@
 "use client";
 import LogoutButton from "@/components/logout";
-import WalletLogin from "@/components/walletLogin";
+// import WalletLogin from "@/components/walletLogin";
 import { getUserCampaigns } from "@/store/slices/campaignSlice";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -11,9 +11,11 @@ import logo from "../../assets/Logo.svg";
 // import { useAccount } from "@particle-network/connect-react-ui";
 import { setUserId } from "@/store/slices/statesSlice";
 import { root } from "@/store/store";
+import { detectConcordiumProvider } from "@concordium/browser-wallet-api-helpers";
 
 const page = () => {
   const [campaign, setCampaign] = useState([]);
+  const [account, setAccount] = useState("");
 
   const dispatch = useDispatch();
   // const account = useAccount();
@@ -31,6 +33,14 @@ const page = () => {
   // }, []);
 
   console.log(campaign);
+
+  useEffect(() => {
+    detectConcordiumProvider()
+      .then((provider) => provider.requestAccounts())
+      .then(setAccount);
+  }, []);
+
+  console.log(account);
 
   // const getUsersCampaign = async () => {
   //   try {
@@ -56,7 +66,7 @@ const page = () => {
         <Image src={logo} alt="Verxio Logo" className="w-[50px]" />
         <div className="flex items-center gap-3">
           {/* <Button name="start earning" /> */}
-          {account ? <LogoutButton /> : <WalletLogin />}
+          {/* {account ? <LogoutButton /> : <WalletLogin />} */}
           {/* <WalletLogin/> */}
         </div>
       </div>

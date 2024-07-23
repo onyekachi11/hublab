@@ -28,18 +28,34 @@ const page = (props) => {
   } = props;
 
   const [account, setAccount] = useState("");
+
+  const router = useRouter();
   // const rpc = useGrpcClient(network);
   // console.log(rpc);
+
+  // const { connection, setConnection, account } = useConnection(
+  //   connectedAccounts,
+  //   genesisHashes
+  // );
+  // const { connect } = useConnect(BROWSER_WALLET, setConnection);
+
+  // useEffect(() => {
+  //   // const provider = detectConcordiumProvider();
+  //   setActiveConnectorType(BROWSER_WALLET);
+  //   persistentConnectorType(BrowserWalletConnector.create);
+  //   //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
+
+  // console.log(activeConnector);
 
   const handleConnect = useCallback(
     () =>
       detectConcordiumProvider()
-        .then((provider) => provider.connect())
+        .then((provider) => provider.requestAccounts())
         .then(setAccount),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
-  console.log(account);
 
   return (
     <section className="w-screen h-screen flex flex-col-reverse md:flex-row items-center">
@@ -72,7 +88,7 @@ const page = (props) => {
             name="Continue"
             // isLoading={status === "loading"}
             className={"px-24"}
-            // onClick={() => getUserProfile()}
+            onClick={() => router.push("/dashboard/campaign")}
           />
         )}
         {!account && (

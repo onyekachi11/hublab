@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Button } from "@/components";
 import { ArrowDown2, ArrowSquareUp, ArrowUp2 } from "iconsax-react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import campaignBanner from "@/assets/campaignBanner.svg";
 
 const Rewards = () => {
   const [revealMethod, setRevealMethod] = useState(false);
@@ -39,11 +40,19 @@ const Rewards = () => {
       {({ values, setFieldValue }) => (
         <Form className="flex flex-col gap-8">
           <div className="w-full p-2 rounded-lg">
-            <div className="rounded-lg p-3 mb-10 shadow ">
-              <h2 className="font-semibold text-lg mb-2 text-[#0D0E32]">
+            <div
+              className="rounded-lg p-5 mb-10  "
+              style={{
+                backgroundImage: `url(${campaignBanner.src})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+              }}
+            >
+              <h2 className="font-semibold text-3xl mb-2 text-[#FBFBFE]">
                 Reward Details
               </h2>
-              <p className="font-normal text-sm text-[#0D0E32]">
+              <p className="font-normal text-lg text-[#FBFBFE]">
                 Add rewards and number of winners to be rewarded
               </p>
             </div>

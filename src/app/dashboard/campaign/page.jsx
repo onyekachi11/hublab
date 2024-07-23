@@ -17,7 +17,7 @@ const Campaign = () => {
           href="/dashboard/campaign?tab=all_campaign"
           isActive={tab === "all_campaign"}
         />
-        <TabButton
+        {/* <TabButton
           name="Ongoing"
           href="/dashboard/campaign?tab=ongoing_campaign"
           isActive={tab === "ongoing_campaign"}
@@ -36,12 +36,12 @@ const Campaign = () => {
           name="Deleted"
           href="/dashboard/campaign?tab=deleted"
           isActive={tab === "deleted"}
-        />
+        /> */}
       </div>
 
       {tab === "all_campaign" && <AllCampaign />}
-      {tab === "ongoing_campaign" && <OnGoingCampaign />}
-      {tab === "draft" && <Details />}
+      {/* {tab === "ongoing_campaign" && <OnGoingCampaign />}
+      {tab === "draft" && <Details />} */}
     </>
   );
 };
