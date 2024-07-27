@@ -54,6 +54,7 @@
     "tailwindcss-animate": "^1.0.7",
     "ts-node": "^10.9.2",
     "tweetnacl": "^1.0.3",
+    "world_countries_lists": "^2.9.0",
     "yup": "^1.4.0"
   },
   "devDependencies": {

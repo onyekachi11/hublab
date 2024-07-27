@@ -1,2 +1,3 @@
 import { useNav } from "./nav_context";
-export { useNav };
+import { useWallet } from "./WalletContext";
+export { useNav, useWallet };

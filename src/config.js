@@ -5,7 +5,7 @@ import {
   WalletConnectConnector,
 } from "@concordium/react-components";
 
-export const DEFAULT_CONTRACT_INDEX = BigInt(9570);
+export const DEFAULT_CONTRACT_INDEX = BigInt(9662);
 export const MAX_CONTRACT_EXECUTION_ENERGY = BigInt(30000);
 export const PING_INTERVAL_MS = 5000;
 

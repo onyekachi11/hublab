@@ -16,46 +16,12 @@ import {
 } from "@concordium/react-components";
 import { BROWSER_WALLET } from "../../config.js";
 import { detectConcordiumProvider } from "@concordium/browser-wallet-api-helpers";
+import { useWallet } from "@/context/WalletContext";
 
-const page = (props) => {
-  const {
-    setActiveConnectorType,
-    setActiveConnector,
-    activeConnector,
-    connectedAccounts,
-    genesisHashes,
-    network,
-  } = props;
-
-  const [account, setAccount] = useState("");
+const page = () => {
+  const { connect, account } = useWallet();
 
   const router = useRouter();
-  // const rpc = useGrpcClient(network);
-  // console.log(rpc);
-
-  // const { connection, setConnection, account } = useConnection(
-  //   connectedAccounts,
-  //   genesisHashes
-  // );
-  // const { connect } = useConnect(BROWSER_WALLET, setConnection);
-
-  // useEffect(() => {
-  //   // const provider = detectConcordiumProvider();
-  //   setActiveConnectorType(BROWSER_WALLET);
-  //   persistentConnectorType(BrowserWalletConnector.create);
-  //   //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
-
-  // console.log(activeConnector);
-
-  const handleConnect = useCallback(
-    () =>
-      detectConcordiumProvider()
-        .then((provider) => provider.requestAccounts())
-        .then(setAccount),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
 
   return (
     <section className="w-screen h-screen flex flex-col-reverse md:flex-row items-center">
@@ -96,7 +62,7 @@ const page = (props) => {
             name="Connect"
             // isLoading={status === "loading"}
             className={"px-24"}
-            onClick={handleConnect}
+            onClick={connect}
           />
         )}
       </div>

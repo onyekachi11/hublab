@@ -3,9 +3,12 @@ import { Button } from "@/components";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { SearchNormal1, Notification } from "iconsax-react";
+import { useWallet } from "@/context";
 
 const layout = ({ children }) => {
   const router = useRouter();
+  const { account, connect } = useWallet();
+
   return (
     <section>
       <div className="bg-white z-50 sticky top-0 flex items-center justify-between px-8 py-3 mb-3">
@@ -28,12 +31,18 @@ const layout = ({ children }) => {
             <p className="text-sm font-normal text-[#787887]">Notification</p>
           </blockquote>
 
-          <Button
-            name="Create Campaign"
-            onClick={() => {
-              router.push("/dashboard/campaign/create_campaign?route=details");
-            }}
-          />
+          {account ? (
+            <Button
+              name="Create Campaign"
+              onClick={() => {
+                router.push(
+                  "/dashboard/campaign/create_campaign?route=details"
+                );
+              }}
+            />
+          ) : (
+            <Button name="Connect" onClick={connect} />
+          )}
         </div>
       </div>
 
