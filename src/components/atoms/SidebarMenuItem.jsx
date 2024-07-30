@@ -7,12 +7,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
-
-const SidebarMenuItem = ({children, icon, tab, tabUrl}) => {
+const SidebarMenuItem = ({ children, icon, tab, tabUrl, newUrl }) => {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const { closeNav } = useNav();
-  
+
   const toggleItem = () => {
     setIsOpen(!isOpen);
   };
@@ -20,7 +19,7 @@ const SidebarMenuItem = ({children, icon, tab, tabUrl}) => {
   useEffect(() => {
     children?.find((child) => pathname.startsWith(child.url)) &&
       setIsOpen(true);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -36,7 +35,7 @@ const SidebarMenuItem = ({children, icon, tab, tabUrl}) => {
     >
       {!children && tabUrl ? (
         <Link
-          href={tabUrl}
+          href={newUrl}
           onClick={closeNav}
           className={`${
             pathname.startsWith(tabUrl)

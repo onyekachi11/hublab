@@ -7,7 +7,7 @@ import { useWallet } from "@/context";
 
 const layout = ({ children }) => {
   const router = useRouter();
-  const { account, connect } = useWallet();
+  const { account, connect, isConnecting } = useWallet();
 
   return (
     <section>
@@ -41,7 +41,7 @@ const layout = ({ children }) => {
               }}
             />
           ) : (
-            <Button name="Connect" onClick={connect} />
+            <Button isLoading={isConnecting} name="Connect" onClick={connect} />
           )}
         </div>
       </div>

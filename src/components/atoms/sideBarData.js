@@ -7,15 +7,16 @@ import BriefcaseDollar from "../../assets/briefcase-dollar.svg";
 // import Gear from "../../assets/Gear.svg"
 
 export const NavigationItems = [
-  {
-    tab: "Dashboard",
-    icon: HandCoins,
-    tabUrl: "/dashboard",
-  },
+  // {
+  //   tab: "Dashboard",
+  //   icon: HandCoins,
+  //   tabUrl: "/dashboard",
+  // },
   {
     tab: "Campaign",
     icon: BriefcaseDollar,
     tabUrl: "/dashboard/campaign",
+    newUrl: "/dashboard/campaign?tab=all_campaign",
   },
   // {
   //   tab: "Learn",

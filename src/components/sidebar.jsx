@@ -8,7 +8,6 @@ import { NavigationItems } from "../components/atoms/sideBarData";
 import Button from "./Button";
 import LogoutButton from "./logout";
 
-
 const Sidebar = () => {
   const { isOpen, setUser } = useNav();
 
@@ -24,8 +23,8 @@ const Sidebar = () => {
           <Logo className="py-12" />
         </div>
         <div className="mx-5">
-        {/* <Button href="/dashboard/" name="Dashboard" className="my-7" /> */}
-          <Button href="/dashboard/profile" name="Profile" className="my-7" />
+          {/* <Button href="/dashboard/" name="Dashboard" className="my-7" /> */}
+          {/* <Button href="/dashboard/profile" name="Profile" className="my-7" /> */}
         </div>
         <div className="flex flex-col justify-between h-[60%]">
           <ul className="">
@@ -33,11 +32,11 @@ const Sidebar = () => {
               <SidebarMenuItem key={`sidebar-item-${index}`} {...item} />
             ))}
           </ul>
-              <LogoutButton />
-            <div className="flex justify-center items-center gap-3">
-              <p className="text-white text-[12px]">Powered by</p>
-              <Image src={AxiosLogo} alt="Axios Logo" width={50} height={50} />
-            </div>
+          <LogoutButton />
+          <div className="flex justify-center items-center gap-3">
+            <p className="text-white text-[12px]">Powered by</p>
+            <Image src={AxiosLogo} alt="Axios Logo" width={50} height={50} />
+          </div>
         </div>
       </nav>
     </>

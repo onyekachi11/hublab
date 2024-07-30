@@ -29,7 +29,7 @@ export const WalletProvider = ({ children, walletProps }) => {
     genesisHashes
   );
 
-  const { connect } = useConnect(activeConnector, setConnection);
+  const { connect, isConnecting } = useConnect(activeConnector, setConnection);
 
   useEffect(() => {
     setActiveConnectorType(BROWSER_WALLET);
@@ -68,7 +68,7 @@ export const WalletProvider = ({ children, walletProps }) => {
 
   // Get the embedded schema from the contract's source module
   useEffect(() => {
-    const initializeContract = async () => {
+    const getSchema = async () => {
       if (rpc && contract) {
         try {
           // Get the embedded schema from the contract's source module
@@ -80,7 +80,7 @@ export const WalletProvider = ({ children, walletProps }) => {
       }
     };
 
-    initializeContract();
+    getSchema();
   }, [rpc, contract]);
 
   // Convert the schema to Base64
@@ -98,6 +98,7 @@ export const WalletProvider = ({ children, walletProps }) => {
         rpc,
         connection,
         connect,
+        isConnecting,
         account,
         contract,
         schema,

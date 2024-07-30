@@ -68,7 +68,7 @@ const Navbar = () => {
 
         <div className="hidden md:block gap-4">
           <Button
-            href="/dashboard"
+            href="dashboard/campaign?tab=all_campaign"
             name="Start Campaign"
             outline
             className="bg-primary px-10"

@@ -19,9 +19,11 @@ import { detectConcordiumProvider } from "@concordium/browser-wallet-api-helpers
 import { useWallet } from "@/context/WalletContext";
 
 const page = () => {
-  const { connect, account } = useWallet();
+  const { connect, account, isConnecting } = useWallet();
 
   const router = useRouter();
+
+  console.log(isConnecting);
 
   return (
     <section className="w-screen h-screen flex flex-col-reverse md:flex-row items-center">
@@ -59,6 +61,7 @@ const page = () => {
         )}
         {!account && (
           <Button
+            isLoading={isConnecting}
             name="Connect"
             // isLoading={status === "loading"}
             className={"px-24"}

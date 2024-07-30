@@ -1,0 +1,1 @@
+/Users/mac/Documents/verxioprotocol/verifier/target/release/campaign-verifier: /Users/mac/Documents/verxioprotocol/verifier/src/handlers.rs /Users/mac/Documents/verxioprotocol/verifier/src/main.rs /Users/mac/Documents/verxioprotocol/verifier/src/types.rs
