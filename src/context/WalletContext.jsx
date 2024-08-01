@@ -24,6 +24,8 @@ const WalletContext = createContext();
 export const WalletProvider = ({ children, walletProps }) => {
   const dispatch = useDispatch();
 
+  const allcamp = useSelector((state) => state.generalStates.allCampaigns);
+
   const {
     setActiveConnectorType,
     activeConnector,
@@ -71,6 +73,7 @@ export const WalletProvider = ({ children, walletProps }) => {
             DEFAULT_CONTRACT_INDEX
           );
           setContract(contractInstance);
+          await fetchCampaign();
         } catch (error) {
           console.error("Error initializing contract:", error);
         }
@@ -105,78 +108,36 @@ export const WalletProvider = ({ children, walletProps }) => {
     )
   );
 
-  // async function fetchCampaign() {
-  //   setCampaignsloading(true);
-  //   try {
-  //     const { name, index, sourceModule } = contract;
-
-  //     const method = ReceiveName.create(
-  //       name,
-  //       EntrypointName.fromString("get_campaigns")
-  //     );
-
-  //     //innvoke contract state
-  //     const result = await rpc?.invokeContract({
-  //       contract: ContractAddress.create(index, 0),
-  //       method,
-  //       invoker: AccountAddress.fromJSON(account),
-  //     });
-
-  //     const buffer = Buffer.from(result.returnValue.buffer).buffer;
-  //     const contract_schema = await getEmbeddedSchema(rpc, sourceModule);
-
-  //     const names = ContractName.fromString("Campaign_contract");
-  //     const entry = EntrypointName.fromString("get_campaigns");
-
-  //     const values = deserializeReceiveReturnValue(
-  //       buffer,
-  //       contract_schema,
-  //       names,
-  //       entry,
-  //       SchemaVersion.V1
-  //     );
-
-  //     console.log(values);
-
-  //     dispatch(setAllCampaigns(values));
-  //     // return values;
-
-  //     setCampaignsloading(false);
-  //   } catch (error) {
-  //     console.error("Error fetching contract data:", error);
-  //   }
-  // }
-
   async function fetchCampaign() {
     setCampaignsloading(true);
     try {
-      const method = ReceiveName.create(
+      const method = ReceiveName?.create(
         contract?.name,
-        EntrypointName.fromString("get_campaigns")
+        EntrypointName?.fromString("get_campaigns")
       );
 
       //invoke contract state
       const result = await rpc?.invokeContract({
-        contract: ContractAddress.create(contract.index, 0),
+        contract: ContractAddress?.create(contract?.index, 0),
         method,
-        invoker: AccountAddress.fromJSON(account),
+        invoker: AccountAddress?.fromJSON(account),
       });
 
-      const buffer = Buffer.from(result.returnValue.buffer).buffer;
+      const buffer = Buffer.from(result?.returnValue?.buffer).buffer;
       const contract_schema = await getEmbeddedSchema(
         rpc,
-        contract.sourceModule
+        contract?.sourceModule
       );
 
-      const names = ContractName.fromString("Campaign_contract");
-      const entry = EntrypointName.fromString("get_campaigns");
+      const names = ContractName?.fromString("Campaign_contract");
+      const entry = EntrypointName?.fromString("get_campaigns");
 
       const values = deserializeReceiveReturnValue(
         buffer,
         contract_schema,
         names,
         entry,
-        SchemaVersion.V1
+        SchemaVersion?.V1
       );
 
       console.log(values);
@@ -196,9 +157,9 @@ export const WalletProvider = ({ children, walletProps }) => {
     }
   }
 
-  useEffect(() => {
-    fetchCampaign();
-  }, [contract, rpc, account]);
+  // useEffect(() => {
+  //   fetchCampaign();
+  // }, []);
   return (
     <WalletContext.Provider
       value={{
@@ -214,6 +175,7 @@ export const WalletProvider = ({ children, walletProps }) => {
         fetchCampaign,
         campaignsLoading,
         setCampaignsloading,
+        allcamp,
       }}
     >
       {children}

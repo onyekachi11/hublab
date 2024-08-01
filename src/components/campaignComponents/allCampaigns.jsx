@@ -5,9 +5,11 @@ import {
   AccountTransactionType,
   CcdAmount,
   ContractAddress,
+  ContractName,
   Energy,
   EntrypointName,
   ReceiveName,
+  SchemaVersion,
   statementAttributeTypeToAttributeType,
 } from "@concordium/web-sdk";
 import { MAX_CONTRACT_EXECUTION_ENERGY } from "@/config";
@@ -21,8 +23,9 @@ import { toast } from "react-toastify";
 import { detectConcordiumProvider } from "@concordium/browser-wallet-api-helpers";
 import Info from "../../assets/info.png";
 import { getChallenge, authorize } from "@/utils/backendUtils";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { root } from "@/store/store";
+import { setAllCampaigns } from "@/store/slices/statesSlice";
 
 const AllCampaign = () => {
   const [nftContract, setNftContract] = useState();
@@ -37,13 +40,15 @@ const AllCampaign = () => {
     moduleSchemaBase64Embedded,
     account,
     rpc,
-    fetchCampaign,
     campaignsLoading,
     setCampaignsloading,
     // campaigns,
+    fetchCampaign,
+    allcamp,
   } = useWallet();
+  const dispatch = useDispatch();
 
-  const allcamp = useSelector((state) => state.generalStates.allCampaigns);
+  // const allcamp = useSelector((state) => state.generalStates.allCampaigns);
 
   useEffect(() => {
     const initialValues = {};
@@ -391,7 +396,7 @@ const AllCampaign = () => {
 
   return (
     <div className="w-full p-3 my-4 rounded-lg">
-      {allcamp && allcamp.length > 0 ? (
+      {allcamp && allcamp?.length > 0 ? (
         <section className="flex flex-col gap-4">
           {allcamp?.map((item, index) => {
             return (
