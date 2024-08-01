@@ -3,19 +3,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Button, VideoPlayer } from "@/components";
-// import { getProfile } from "@/store/slices/profileSlice";
-import { toast } from "react-toastify";
-import { setUserId, setUserProfile, setEdit } from "@/store/slices/statesSlice";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  BrowserWalletConnector,
-  persistentConnectorType,
-  useConnect,
-  useConnection,
-  useGrpcClient,
-} from "@concordium/react-components";
-import { BROWSER_WALLET } from "../../config.js";
-import { detectConcordiumProvider } from "@concordium/browser-wallet-api-helpers";
 import { useWallet } from "@/context/WalletContext";
 
 const page = () => {
