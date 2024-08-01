@@ -150,22 +150,23 @@ export const WalletProvider = ({ children, walletProps }) => {
   async function fetchCampaign() {
     setCampaignsloading(true);
     try {
-      const { name, index, sourceModule } = contract;
-
       const method = ReceiveName.create(
-        name,
+        contract?.name,
         EntrypointName.fromString("get_campaigns")
       );
 
       //invoke contract state
       const result = await rpc?.invokeContract({
-        contract: ContractAddress.create(index, 0),
+        contract: ContractAddress.create(contract.index, 0),
         method,
         invoker: AccountAddress.fromJSON(account),
       });
 
       const buffer = Buffer.from(result.returnValue.buffer).buffer;
-      const contract_schema = await getEmbeddedSchema(rpc, sourceModule);
+      const contract_schema = await getEmbeddedSchema(
+        rpc,
+        contract.sourceModule
+      );
 
       const names = ContractName.fromString("Campaign_contract");
       const entry = EntrypointName.fromString("get_campaigns");
@@ -197,7 +198,7 @@ export const WalletProvider = ({ children, walletProps }) => {
 
   useEffect(() => {
     fetchCampaign();
-  }, []);
+  }, [contract, rpc, account]);
   return (
     <WalletContext.Provider
       value={{
