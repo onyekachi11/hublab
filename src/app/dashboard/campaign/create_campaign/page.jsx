@@ -30,7 +30,7 @@ const CreateCampaign = () => {
 
       {route === "details" && <Details />}
       {/* {route === "action" && <Action />} */}
-      {route === "rewards" && <Rewards />}
+      {/* {route === "rewards" && <Rewards />} */}
     </>
   );
 };

@@ -20,7 +20,7 @@ const Sidebar = () => {
       } w-[300px] bg-primary z-50 h-full`}
       >
         <div className="flex justify-center items-center px-[5%]">
-          <Logo className="py-12" />
+          <Logo className="py-10" />
         </div>
         <div className="mx-5">
           {/* <Button href="/dashboard/" name="Dashboard" className="my-7" /> */}
@@ -33,10 +33,10 @@ const Sidebar = () => {
             ))}
           </ul>
           <LogoutButton />
-          <div className="flex justify-center items-center gap-3">
+          {/* <div className="flex justify-center items-center gap-3">
             <p className="text-white text-[12px]">Powered by</p>
             <Image src={AxiosLogo} alt="Axios Logo" width={50} height={50} />
-          </div>
+          </div> */}
         </div>
       </nav>
     </>

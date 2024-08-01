@@ -6,11 +6,24 @@ import {
   useConnection,
   useGrpcClient,
 } from "@concordium/react-components";
+import {
+  AccountAddress,
+  ContractAddress,
+  ContractName,
+  deserializeReceiveReturnValue,
+  EntrypointName,
+  ReceiveName,
+  SchemaVersion,
+} from "@concordium/web-sdk";
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { setAllCampaigns } from "@/store/slices/statesSlice";
 
 const WalletContext = createContext();
 
 export const WalletProvider = ({ children, walletProps }) => {
+  const dispatch = useDispatch();
+
   const {
     setActiveConnectorType,
     activeConnector,
@@ -21,6 +34,7 @@ export const WalletProvider = ({ children, walletProps }) => {
 
   const [contract, setContract] = useState(null);
   const [schema, setSchema] = useState(null);
+  const [campaignsLoading, setCampaignsloading] = useState(false);
 
   const rpc = useGrpcClient(network);
 
@@ -91,6 +105,99 @@ export const WalletProvider = ({ children, walletProps }) => {
     )
   );
 
+  // async function fetchCampaign() {
+  //   setCampaignsloading(true);
+  //   try {
+  //     const { name, index, sourceModule } = contract;
+
+  //     const method = ReceiveName.create(
+  //       name,
+  //       EntrypointName.fromString("get_campaigns")
+  //     );
+
+  //     //innvoke contract state
+  //     const result = await rpc?.invokeContract({
+  //       contract: ContractAddress.create(index, 0),
+  //       method,
+  //       invoker: AccountAddress.fromJSON(account),
+  //     });
+
+  //     const buffer = Buffer.from(result.returnValue.buffer).buffer;
+  //     const contract_schema = await getEmbeddedSchema(rpc, sourceModule);
+
+  //     const names = ContractName.fromString("Campaign_contract");
+  //     const entry = EntrypointName.fromString("get_campaigns");
+
+  //     const values = deserializeReceiveReturnValue(
+  //       buffer,
+  //       contract_schema,
+  //       names,
+  //       entry,
+  //       SchemaVersion.V1
+  //     );
+
+  //     console.log(values);
+
+  //     dispatch(setAllCampaigns(values));
+  //     // return values;
+
+  //     setCampaignsloading(false);
+  //   } catch (error) {
+  //     console.error("Error fetching contract data:", error);
+  //   }
+  // }
+
+  async function fetchCampaign() {
+    setCampaignsloading(true);
+    try {
+      const { name, index, sourceModule } = contract;
+
+      const method = ReceiveName.create(
+        name,
+        EntrypointName.fromString("get_campaigns")
+      );
+
+      //invoke contract state
+      const result = await rpc?.invokeContract({
+        contract: ContractAddress.create(index, 0),
+        method,
+        invoker: AccountAddress.fromJSON(account),
+      });
+
+      const buffer = Buffer.from(result.returnValue.buffer).buffer;
+      const contract_schema = await getEmbeddedSchema(rpc, sourceModule);
+
+      const names = ContractName.fromString("Campaign_contract");
+      const entry = EntrypointName.fromString("get_campaigns");
+
+      const values = deserializeReceiveReturnValue(
+        buffer,
+        contract_schema,
+        names,
+        entry,
+        SchemaVersion.V1
+      );
+
+      console.log(values);
+
+      // Dispatch the action to update the Redux store
+      dispatch(setAllCampaigns(values));
+
+      // Force a re-render by updating a local state
+      setCampaignsloading(false);
+
+      // Return the values in case you need them
+      return values;
+    } catch (error) {
+      console.error("Error fetching contract data:", error);
+      setCampaignsloading(false);
+      throw error;
+    }
+  }
+
+  useEffect(() => {
+    fetchCampaign();
+  }, []);
   return (
     <WalletContext.Provider
       value={{
@@ -103,6 +210,9 @@ export const WalletProvider = ({ children, walletProps }) => {
         contract,
         schema,
         moduleSchemaBase64Embedded,
+        fetchCampaign,
+        campaignsLoading,
+        setCampaignsloading,
       }}
     >
       {children}

@@ -1,28 +1,22 @@
 import React from "react";
 import Image from "next/image";
 import SignOut from "../assets/SignOut.svg";
-// import { useDispatch } from "react-redux";
-// import { useParticleConnect } from '@particle-network/connect-react-ui';
 import { useRouter } from "next/navigation";
-import { persistor } from "@/store/store";
+import { useWallet } from "@/context";
 
 const LogoutButton = () => {
-  // const { disconnect } = useParticleConnect();
-  // const onDisconnect = () => disconnect({ hideLoading: true });
-  // const dispatch = useDispatch();
   const router = useRouter();
 
-  // const handleLogout = () => {
+  const { connection, account } = useWallet();
 
-  //     onDisconnect()
-  //     // dispatch(resetState());
-  //     persistor.purge();
-  //     router.push("/");
-  // };
-
+  const handleLogout = async () => {
+    console.log(connection?.disconnect());
+    return connection?.disconnect();
+  };
+  if (!account) return null;
   return (
     <div
-      // onClick={handleLogout}
+      onClick={handleLogout}
       className="flex items-center justify-center w-[100%] gap-3 cursor-pointer"
     >
       <Image src={SignOut} alt="" />

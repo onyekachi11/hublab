@@ -19,17 +19,46 @@ import { getEmbeddedSchema } from "@/utils/getEmbededSchema";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { detectConcordiumProvider } from "@concordium/browser-wallet-api-helpers";
+import Info from "../../assets/info.png";
 import { getChallenge, authorize } from "@/utils/backendUtils";
+import { useSelector } from "react-redux";
+import { root } from "@/store/store";
 
-const AllCampaign = ({ campaigns }) => {
+const AllCampaign = () => {
   const [nftContract, setNftContract] = useState();
   const [nftSchema, setNftSchema] = useState();
+  const [loadingContract, setLoadingContract] = useState();
+  const [inputValues, setInputValues] = useState([]);
+  const [inputValuesMap, setInputValuesMap] = useState({});
   const [authToken, setAuthToken] = useState("");
-  const { connection, contract, moduleSchemaBase64Embedded, account, rpc } =
-    useWallet();
+  const {
+    connection,
+    contract,
+    moduleSchemaBase64Embedded,
+    account,
+    rpc,
+    fetchCampaign,
+    campaignsLoading,
+    setCampaignsloading,
+    // campaigns,
+  } = useWallet();
+
+  const allcamp = useSelector((state) => state.generalStates.allCampaigns);
 
   useEffect(() => {
-    const initializeContract = async () => {
+    const initialValues = {};
+    allcamp?.forEach((item) => {
+      if (item.campaign?.tasks?.tasks) {
+        initialValues[Number(item.campaign.id)] = new Array(
+          item.campaign.tasks.tasks.length
+        ).fill("");
+      }
+    });
+    setInputValuesMap(initialValues);
+  }, [allcamp]);
+
+  useEffect(() => {
+    const initializeNftContract = async () => {
       if (rpc) {
         try {
           const contractInstance = await initContract(
@@ -44,7 +73,7 @@ const AllCampaign = ({ campaigns }) => {
       }
     };
 
-    initializeContract();
+    initializeNftContract();
   }, [rpc]);
 
   // console.log(nftContract);
@@ -69,53 +98,48 @@ const AllCampaign = ({ campaigns }) => {
     getSchema();
   }, [rpc, nftContract]);
 
-  // console.log(nftSchema);
+  useEffect(() => {
+    if (!account) {
+      toast.info("Connect your wallet");
+    }
+  }, [account]);
 
   const completeCampaign = (id) => {
     const params = {
-      parameters: id,
+      parameters: {
+        id: id,
+        answers: inputValuesMap[`${id}`],
+      },
       schema: moduleSchemaFromBase64(moduleSchemaBase64Embedded),
     };
     // Sign and send the transaction
-    return connection?.signAndSendTransaction(
-      account,
-      AccountTransactionType.Update,
-      {
-        amount: CcdAmount.fromCcd(0),
-        address: ContractAddress.create(contract.index, 0),
-        receiveName: ReceiveName.create(
-          contract.name,
-          EntrypointName.fromString("complete_campaign")
-        ),
-        maxContractExecutionEnergy: Energy.create(
-          MAX_CONTRACT_EXECUTION_ENERGY
-        ),
-      },
-      params
-    );
-  };
-  const authorizeCampaign = (id) => {
-    const params = {
-      parameters: id,
-      schema: moduleSchemaFromBase64(moduleSchemaBase64Embedded),
-    };
-    // Sign and send the transaction
-    return connection?.signAndSendTransaction(
-      account,
-      AccountTransactionType.Update,
-      {
-        amount: CcdAmount.fromCcd(0),
-        address: ContractAddress.create(contract.index, 0),
-        receiveName: ReceiveName.create(
-          contract.name,
-          EntrypointName.fromString("authorize_campaign")
-        ),
-        maxContractExecutionEnergy: Energy.create(
-          MAX_CONTRACT_EXECUTION_ENERGY
-        ),
-      },
-      params
-    );
+    return connection
+      ?.signAndSendTransaction(
+        account,
+        AccountTransactionType.Update,
+        {
+          amount: CcdAmount.fromCcd(0),
+          address: ContractAddress.create(contract.index, 0),
+          receiveName: ReceiveName.create(
+            contract.name,
+            EntrypointName.fromString("complete_campaign")
+          ),
+          maxContractExecutionEnergy: Energy.create(
+            MAX_CONTRACT_EXECUTION_ENERGY
+          ),
+        },
+        params
+      )
+      .then((transactionHash) => {
+        toast.success(`Campaign completed", ${transactionHash}`);
+        fetchCampaign();
+        return transactionHash;
+      })
+      .catch((error) => {
+        console.error("Error completing campaign:", error);
+        toast.error("Error completing campaign. Please try again.");
+        throw error;
+      });
   };
 
   const moduleNftSchemaBase64Embedded = btoa(
@@ -124,15 +148,49 @@ const AllCampaign = ({ campaigns }) => {
       ""
     )
   );
-  console.log(account);
 
-  const mintNft = () => {
+  const completeMint = (id) => {
+    const params = {
+      parameters: id,
+      schema: moduleSchemaFromBase64(moduleSchemaBase64Embedded),
+    };
+    // Sign and send the transaction
+    return connection
+      ?.signAndSendTransaction(
+        account,
+        AccountTransactionType.Update,
+        {
+          amount: CcdAmount.fromCcd(0),
+          address: ContractAddress.create(contract.index, 0),
+          receiveName: ReceiveName.create(
+            contract.name,
+            EntrypointName.fromString("complete_mint")
+          ),
+          maxContractExecutionEnergy: Energy.create(
+            MAX_CONTRACT_EXECUTION_ENERGY
+          ),
+        },
+        params
+      )
+      .then((transactionHash) => {
+        toast.success(`Mint Successful", ${transactionHash}`);
+        fetchCampaign();
+        return transactionHash;
+      })
+      .catch((error) => {
+        console.error("Error minting NFT:", error);
+        toast.error("Error completing campaign. Please try again.");
+        throw error;
+      });
+  };
+
+  const mintNft = (id) => {
     const params = {
       parameters: {
         owner: {
           Account: [account],
         },
-        tokens: ["00000114"],
+        tokens: ["00000115"],
       },
       schema: moduleSchemaFromBase64(moduleNftSchemaBase64Embedded),
     };
@@ -157,72 +215,185 @@ const AllCampaign = ({ campaigns }) => {
         params
       )
       .then((transactionHash) => {
-        console.log(
-          "NFT minted successfully! Transaction hash:",
-          transactionHash
-        );
-        toast.success(`Mint Successfull", ${transactionHash}`);
+        completeMint(id);
         return transactionHash;
       })
       .catch((error) => {
-        console.error("Error minting NFT:", error);
-
-        toast.error("Error minting NFT. Please try again.");
+        console.error("Error completing campaign:", error);
+        toast.error("Mint rejected");
         throw error;
       });
   };
 
+  // const authorizeCampaign = (id) => {
+  //   const params = {
+  //     parameters: id,
+  //     schema: moduleSchemaFromBase64(moduleSchemaBase64Embedded),
+  //   };
+  //   // Sign and send the transaction
+  //   return connection
+  //     ?.signAndSendTransaction(
+  //       account,
+  //       AccountTransactionType.Update,
+  //       {
+  //         amount: CcdAmount.fromCcd(0),
+  //         address: ContractAddress.create(contract.index, 0),
+  //         receiveName: ReceiveName.create(
+  //           contract.name,
+  //           EntrypointName.fromString("authorize_campaign")
+  //         ),
+  //         maxContractExecutionEnergy: Energy.create(
+  //           MAX_CONTRACT_EXECUTION_ENERGY
+  //         ),
+  //       },
+  //       params
+  //     )
+  //     .then((transactionHash) => {
+  //       toast.success(`Authorization Successfull", ${transactionHash}`);
+  //       fetchCampaign();
+  //       return transactionHash;
+  //     })
+  //     .catch((error) => {
+  //       toast.error("Failed to authorize.");
+  //       throw error;
+  //     });
+  // };
+
+  // const handleAuthorize = useCallback(
+  //   async (nationality, lower, upper, id) => {
+  //     const statement = [
+  //       {
+  //         type: "AttributeInSet",
+  //         attributeTag: "nationality",
+  //         set: nationality,
+  //       },
+  //       {
+  //         type: "AttributeInRange",
+  //         attributeTag: "dob",
+  //         lower: lower,
+  //         upper: upper,
+  //       },
+  //     ];
+  //     if (!account) {
+  //       throw new Error("Unreachable");
+  //     }
+  //     const provider = await detectConcordiumProvider();
+  //     const challenge = await getChallenge(VERIFIER_URL, account);
+  //     const proof = await provider.requestIdProof(
+  //       account,
+  //       statement,
+  //       challenge
+  //     );
+
+  //     const newAuthToken = await authorize(
+  //       VERIFIER_URL,
+  //       challenge,
+  //       proof,
+  //       statement
+  //     );
+  //     // setAuthToken(newAuthToken);
+  //     console.log(newAuthToken);
+
+  //     newAuthToken && authorizeCampaign(id);
+
+  //     // eslint-disable-next-line react-hooks/exhaustive-deps
+  //   },
+  //   [account]
+  // );
+
+  const authorizeCampaign = async (id) => {
+    const params = {
+      parameters: id,
+      schema: moduleSchemaFromBase64(moduleSchemaBase64Embedded),
+    };
+
+    try {
+      const transactionHash = await connection?.signAndSendTransaction(
+        account,
+        AccountTransactionType.Update,
+        {
+          amount: CcdAmount.fromCcd(0),
+          address: ContractAddress.create(contract.index, 0),
+          receiveName: ReceiveName.create(
+            contract.name,
+            EntrypointName.fromString("authorize_campaign")
+          ),
+          maxContractExecutionEnergy: Energy.create(
+            MAX_CONTRACT_EXECUTION_ENERGY
+          ),
+        },
+        params
+      );
+
+      toast.success(`Authorization Successful, ${transactionHash}`);
+      await fetchCampaign();
+      return transactionHash;
+    } catch (error) {
+      toast.error("Failed to authorize.");
+      throw error;
+    }
+  };
+
   const handleAuthorize = useCallback(
     async (nationality, lower, upper, id) => {
-      const statement = [
-        {
-          type: "AttributeInSet",
-          attributeTag: "nationality",
-          set: nationality,
-        },
-        {
-          type: "AttributeInRange",
-          attributeTag: "dob",
-          lower: lower,
-          upper: upper,
-        },
-      ];
-      if (!account) {
-        throw new Error("Unreachable");
+      try {
+        const statement = [
+          {
+            type: "AttributeInSet",
+            attributeTag: "nationality",
+            set: nationality,
+          },
+          {
+            type: "AttributeInRange",
+            attributeTag: "dob",
+            lower: lower,
+            upper: upper,
+          },
+        ];
+
+        if (!account) {
+          throw new Error("No account available");
+        }
+
+        const provider = await detectConcordiumProvider();
+        const challenge = await getChallenge(VERIFIER_URL, account);
+        const proof = await provider.requestIdProof(
+          account,
+          statement,
+          challenge
+        );
+
+        const newAuthToken = await authorize(
+          VERIFIER_URL,
+          challenge,
+          proof,
+          statement
+        );
+
+        console.log(newAuthToken);
+
+        if (newAuthToken) {
+          await authorizeCampaign(id);
+        } else {
+          toast.error("Failed to get authorization token");
+        }
+      } catch (error) {
+        console.error("Authorization failed:", error);
+        toast.error("Authorization failed: " + error.message);
       }
-      const provider = await detectConcordiumProvider();
-      const challenge = await getChallenge(VERIFIER_URL, account);
-      console.log(challenge);
-      const proof = await provider.requestIdProof(
-        account,
-        statement,
-        challenge
-      );
-      console.log(proof);
-
-      const newAuthToken = await authorize(
-        VERIFIER_URL,
-        challenge,
-        proof,
-        statement
-      );
-      // setAuthToken(newAuthToken);
-      // console.log(newAuthToken);
-
-      newAuthToken && authorizeCampaign(id);
-
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     },
-    [account]
+    [account, authorizeCampaign, fetchCampaign]
   );
 
-  // console.log(authToken);
+  useEffect(() => {
+    fetchCampaign();
+  }, []);
 
   return (
     <div className="w-full p-3 my-4 rounded-lg">
-      {campaigns && campaigns.length > 0 ? (
+      {allcamp && allcamp.length > 0 ? (
         <section className="flex flex-col gap-4">
-          {campaigns?.map((item, index) => {
+          {allcamp?.map((item, index) => {
             return (
               <div
                 key={index}
@@ -239,45 +410,124 @@ const AllCampaign = ({ campaigns }) => {
                     Total participants: {Number(item.campaign?.participants)}
                   </p>
                 </div>
-                <div className="flex justify-between items-center">
-                  <p>
-                    Only allowed to countries on this list:{" "}
-                    {item.campaign?.nationality?.map((item, index) => (
-                      <span key={index}>{item}, </span>
+                {item.authorized === true && (
+                  <div>
+                    <p className="font-semibol text-primary text-[20px] mb-1 mt-6">
+                      Tasks
+                    </p>
+                    {item.campaign?.tasks?.tasks?.map((task, index) => (
+                      <div key={index} className="mb-3">
+                        <div className="flex gap-1 mb-1">
+                          <p>{index + 1}.</p>
+                          <p>{task}</p>
+                        </div>
+
+                        {item.campaign?.tasks?.answers.length == 0 && (
+                          <input
+                            type="text"
+                            className="border border-black outline-none bg-transparent px-2 py-2 rounded-md w-[40%]"
+                            onChange={(e) => {
+                              setInputValuesMap((prevMap) => {
+                                const newArray = [
+                                  ...(prevMap[item.campaign.id] || []),
+                                ];
+                                newArray[index] = e.target.value;
+                                return {
+                                  ...prevMap,
+                                  [item.campaign.id]: newArray,
+                                };
+                              });
+                            }}
+                          />
+                        )}
+                      </div>
                     ))}
-                  </p>
+                    {item.campaign?.tasks?.answers.length > 0 && (
+                      <div>
+                        <p className="font-semibol text-primary text-[20px] mb-1 mt-6">
+                          Answers
+                        </p>
+                        {item.campaign?.tasks?.answers.map((answer, index2) => (
+                          <div key={index2}>
+                            {answer[1].map((a, a_index) => (
+                              <div key={a_index} className="flex gap-2">
+                                <p>{a_index + 1}.</p>
+                                <p>{a}</p>
+                              </div>
+                            ))}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                <div className="flex justify-between items-center">
+                  <div className="flex gap-2 items-center">
+                    <div className="w-[20px]">
+                      <Image sizes="" src={Info} alt="Information" />
+                    </div>
+                    <p>
+                      Only allowed to countries on this list:{" "}
+                      {item.campaign?.nationality?.map((item, index) => (
+                        <span key={index}>{item}, </span>
+                      ))}
+                    </p>
+                  </div>
                   {item.completed === false ? (
                     item.authorized === true ? (
                       <p
                         className="border border-lightBlue px-2 py-2 text-lightBlue rounded-md"
-                        onClick={() => completeCampaign(item.campaign.id)}
+                        onClick={async () => {
+                          console.log(inputValuesMap[`${item.campaign.id}`]);
+
+                          const taskAnswers =
+                            inputValuesMap[`${item.campaign.id}`] || [];
+                          const allTasksAnswered =
+                            taskAnswers.length ===
+                              item.campaign.tasks.tasks.length &&
+                            taskAnswers.every((answer) => answer.trim() !== "");
+
+                          if (allTasksAnswered) {
+                            await completeCampaign(item.campaign.id);
+                            await fetchCampaign();
+                          } else {
+                            toast.info("Complete all answers");
+                          }
+                        }}
                       >
-                        Participate
+                        Complete campaign
                       </p>
                     ) : (
                       <p
                         className="border border-lightBlue px-2 py-2 text-lightBlue rounded-md"
                         // onClick={() => completeCampaign(item.campaign.id)}
-                        onClick={() =>
-                          handleAuthorize(
+                        onClick={async () => {
+                          await handleAuthorize(
                             item.campaign.nationality,
                             item.campaign.age_range.lower,
                             item.campaign.age_range.upper,
                             item.campaign.id
-                          ).catch((e) => alert(e.message))
-                        }
+                          );
+                          await fetchCampaign();
+                        }}
                       >
-                        Authorize
+                        Participate
                       </p>
                     )
                   ) : (
                     <div className="flex gap-2">
-                      <button
-                        className="border border-lightBlue px-2 py-2 text-lightBlue rounded-md"
-                        onClick={() => mintNft()}
-                      >
-                        Mint NFT
-                      </button>
+                      {item.minted === false && (
+                        <button
+                          className="border border-lightBlue px-2 py-2 text-lightBlue rounded-md"
+                          onClick={async () => {
+                            await mintNft(item.campaign.id);
+                            await fetchCampaign();
+                          }}
+                        >
+                          Mint NFT
+                        </button>
+                      )}
                       <p className="border border-gray-400 px-2 py-2 text-gray-400 rounded-md">
                         Completed
                       </p>
@@ -290,28 +540,34 @@ const AllCampaign = ({ campaigns }) => {
         </section>
       ) : (
         <section className="flex flex-col gap-3 items-center justify-center h-full w-full mt-8">
-          <div className="border bg-white shadow-sm rounded-xl">
-            <Image
-              src={"/images/emptyStateImage.svg"}
-              height={300}
-              width={300}
-              alt="champ"
-              className="inline"
-            />
-          </div>
+          {campaignsLoading ? (
+            <p>Loading campaigns.....</p>
+          ) : (
+            <>
+              <div className="border bg-white shadow-sm rounded-xl">
+                <Image
+                  src={"/images/emptyStateImage.svg"}
+                  height={300}
+                  width={300}
+                  alt="champ"
+                  className="inline"
+                />
+              </div>
 
-          <p className="text-[#0D0E32] font-medium text-2xl">
-            Oops! No campaigns yet
-          </p>
-          <p className="text-[#0D0E32] font-normal text-sm">
-            No worries, you can do something about it
-          </p>
+              <p className="text-[#0D0E32] font-medium text-2xl">
+                Oops! No campaigns yet
+              </p>
+              <p className="text-[#0D0E32] font-normal text-sm">
+                No worries, you can do something about it
+              </p>
 
-          <Button
-            href={"/dashboard/campaign/create_campaign?route=details"}
-            className={"px-6"}
-            name={"Create Campaign"}
-          />
+              <Button
+                href={"/dashboard/campaign/create_campaign?route=details"}
+                className={"px-6"}
+                name={"Create Campaign"}
+              />
+            </>
+          )}
         </section>
       )}
     </div>
