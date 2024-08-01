@@ -109,7 +109,7 @@ const AllCampaign = () => {
     }
   }, [account]);
 
-  const completeCampaign = (id) => {
+  const completeCampaign = async (id) => {
     const params = {
       parameters: {
         id: id,
@@ -118,8 +118,9 @@ const AllCampaign = () => {
       schema: moduleSchemaFromBase64(moduleSchemaBase64Embedded),
     };
     // Sign and send the transaction
-    return connection
-      ?.signAndSendTransaction(
+
+    try {
+      const transactionHash = await connection?.signAndSendTransaction(
         account,
         AccountTransactionType.Update,
         {
@@ -134,17 +135,16 @@ const AllCampaign = () => {
           ),
         },
         params
-      )
-      .then((transactionHash) => {
-        toast.success(`Campaign completed", ${transactionHash}`);
-        fetchCampaign();
-        return transactionHash;
-      })
-      .catch((error) => {
-        console.error("Error completing campaign:", error);
-        toast.error("Error completing campaign. Please try again.");
-        throw error;
-      });
+      );
+      toast.success(`Campaign completed", ${transactionHash}`);
+      const result = await fetchCampaign();
+      dispatch(setAllCampaigns(result));
+      return transactionHash;
+    } catch (error) {
+      console.error("Error completing campaign:", error);
+      toast.error("Error completing campaign. Please try again.");
+      throw error;
+    }
   };
 
   const moduleNftSchemaBase64Embedded = btoa(
@@ -154,14 +154,15 @@ const AllCampaign = () => {
     )
   );
 
-  const completeMint = (id) => {
+  const completeMint = async (id) => {
     const params = {
       parameters: id,
       schema: moduleSchemaFromBase64(moduleSchemaBase64Embedded),
     };
     // Sign and send the transaction
-    return connection
-      ?.signAndSendTransaction(
+
+    try {
+      const transactionHash = await connection?.signAndSendTransaction(
         account,
         AccountTransactionType.Update,
         {
@@ -176,20 +177,19 @@ const AllCampaign = () => {
           ),
         },
         params
-      )
-      .then((transactionHash) => {
-        toast.success(`Mint Successful", ${transactionHash}`);
-        fetchCampaign();
-        return transactionHash;
-      })
-      .catch((error) => {
-        console.error("Error minting NFT:", error);
-        toast.error("Error completing campaign. Please try again.");
-        throw error;
-      });
+      );
+      toast.success(`Mint Successful", ${transactionHash}`);
+      const result = await fetchCampaign();
+      dispatch(setAllCampaigns(result));
+      return transactionHash;
+    } catch (error) {
+      console.error("Error minting NFT:", error);
+      toast.error("Error completing campaign. Please try again.");
+      throw error;
+    }
   };
 
-  const mintNft = (id) => {
+  const mintNft = async (id) => {
     const params = {
       parameters: {
         owner: {
@@ -202,8 +202,9 @@ const AllCampaign = () => {
 
     console.log(params);
     // Sign and send the transaction
-    return connection
-      ?.signAndSendTransaction(
+
+    try {
+      const transactionHash = await connection?.signAndSendTransaction(
         account,
         AccountTransactionType.Update,
         {
@@ -218,93 +219,15 @@ const AllCampaign = () => {
           ),
         },
         params
-      )
-      .then((transactionHash) => {
-        completeMint(id);
-        return transactionHash;
-      })
-      .catch((error) => {
-        console.error("Error completing campaign:", error);
-        toast.error("Mint rejected");
-        throw error;
-      });
+      );
+      await completeMint(id);
+      return transactionHash;
+    } catch (error) {
+      console.error("Error completing campaign:", error);
+      toast.error("Mint rejected");
+      throw error;
+    }
   };
-
-  // const authorizeCampaign = (id) => {
-  //   const params = {
-  //     parameters: id,
-  //     schema: moduleSchemaFromBase64(moduleSchemaBase64Embedded),
-  //   };
-  //   // Sign and send the transaction
-  //   return connection
-  //     ?.signAndSendTransaction(
-  //       account,
-  //       AccountTransactionType.Update,
-  //       {
-  //         amount: CcdAmount.fromCcd(0),
-  //         address: ContractAddress.create(contract.index, 0),
-  //         receiveName: ReceiveName.create(
-  //           contract.name,
-  //           EntrypointName.fromString("authorize_campaign")
-  //         ),
-  //         maxContractExecutionEnergy: Energy.create(
-  //           MAX_CONTRACT_EXECUTION_ENERGY
-  //         ),
-  //       },
-  //       params
-  //     )
-  //     .then((transactionHash) => {
-  //       toast.success(`Authorization Successfull", ${transactionHash}`);
-  //       fetchCampaign();
-  //       return transactionHash;
-  //     })
-  //     .catch((error) => {
-  //       toast.error("Failed to authorize.");
-  //       throw error;
-  //     });
-  // };
-
-  // const handleAuthorize = useCallback(
-  //   async (nationality, lower, upper, id) => {
-  //     const statement = [
-  //       {
-  //         type: "AttributeInSet",
-  //         attributeTag: "nationality",
-  //         set: nationality,
-  //       },
-  //       {
-  //         type: "AttributeInRange",
-  //         attributeTag: "dob",
-  //         lower: lower,
-  //         upper: upper,
-  //       },
-  //     ];
-  //     if (!account) {
-  //       throw new Error("Unreachable");
-  //     }
-  //     const provider = await detectConcordiumProvider();
-  //     const challenge = await getChallenge(VERIFIER_URL, account);
-  //     const proof = await provider.requestIdProof(
-  //       account,
-  //       statement,
-  //       challenge
-  //     );
-
-  //     const newAuthToken = await authorize(
-  //       VERIFIER_URL,
-  //       challenge,
-  //       proof,
-  //       statement
-  //     );
-  //     // setAuthToken(newAuthToken);
-  //     console.log(newAuthToken);
-
-  //     newAuthToken && authorizeCampaign(id);
-
-  //     // eslint-disable-next-line react-hooks/exhaustive-deps
-  //   },
-  //   [account]
-  // );
 
   const authorizeCampaign = async (id) => {
     const params = {
@@ -483,7 +406,7 @@ const AllCampaign = () => {
                     item.authorized === true ? (
                       <p
                         className="border border-lightBlue px-2 py-2 text-lightBlue rounded-md"
-                        onClick={async () => {
+                        onClick={() => {
                           console.log(inputValuesMap[`${item.campaign.id}`]);
 
                           const taskAnswers =
@@ -494,8 +417,8 @@ const AllCampaign = () => {
                             taskAnswers.every((answer) => answer.trim() !== "");
 
                           if (allTasksAnswered) {
-                            await completeCampaign(item.campaign.id);
-                            await fetchCampaign();
+                            completeCampaign(item.campaign.id);
+                            // await fetchCampaign();
                           } else {
                             toast.info("Complete all answers");
                           }
@@ -523,7 +446,7 @@ const AllCampaign = () => {
                   ) : (
                     <div className="flex gap-2">
                       {item.minted === false && (
-                        <button
+                        <p
                           className="border border-lightBlue px-2 py-2 text-lightBlue rounded-md"
                           onClick={async () => {
                             await mintNft(item.campaign.id);
@@ -531,7 +454,7 @@ const AllCampaign = () => {
                           }}
                         >
                           Mint NFT
-                        </button>
+                        </p>
                       )}
                       <p className="border border-gray-400 px-2 py-2 text-gray-400 rounded-md">
                         Completed
