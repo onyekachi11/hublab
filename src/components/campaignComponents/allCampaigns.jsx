@@ -52,13 +52,14 @@ const AllCampaign = () => {
 
   useEffect(() => {
     const initialValues = {};
-    allcamp?.forEach((item) => {
-      if (item.campaign?.tasks?.tasks) {
-        initialValues[Number(item.campaign.id)] = new Array(
-          item.campaign.tasks.tasks.length
-        ).fill("");
-      }
-    });
+    allcamp &&
+      allcamp?.forEach((item) => {
+        if (item.campaign?.tasks?.tasks) {
+          initialValues[Number(item.campaign.id)] = new Array(
+            item.campaign.tasks.tasks.length
+          ).fill("");
+        }
+      });
     setInputValuesMap(initialValues);
   }, [allcamp]);
 

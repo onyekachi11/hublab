@@ -189,7 +189,7 @@ const Details = () => {
                 <Field
                   className="border outline-none bg-transparent text-[#484851] font-normal text-[14px] rounded-lg w-full px-5 py-3 border-[#60606C]"
                   name="description"
-                  as="textArea"
+                  as="textarea"
                   placeholder="desribe your campaign"
                 />
                 <ErrorMessage name="description" component={Formikerror} />
