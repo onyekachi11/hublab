@@ -36,7 +36,7 @@ const AllCampaign = () => {
   const [inputValues, setInputValues] = useState([]);
   const [inputValuesMap, setInputValuesMap] = useState({});
   const [authToken, setAuthToken] = useState("");
-  const [loading, setLoading] = useState(null);
+  const [loadingStates, setLoadingStates] = useState({});
 
   const {
     connection,
@@ -52,6 +52,24 @@ const AllCampaign = () => {
   const dispatch = useDispatch();
 
   const allCamp = useSelector((state) => state.generalStates.allCampaigns);
+
+  function getAnswersForAddress(answers, addressToCheck) {
+    if (Array.isArray(answers)) {
+      for (const answerSet of answers) {
+        if (Array.isArray(answerSet) && answerSet.length === 2) {
+          const [accountObj, answerArray] = answerSet;
+          if (
+            accountObj.Account &&
+            Array.isArray(accountObj.Account) &&
+            accountObj.Account.includes(addressToCheck)
+          ) {
+            return answerArray;
+          }
+        }
+      }
+    }
+    return null;
+  }
 
   useEffect(() => {
     const initialValues = {};
@@ -128,7 +146,10 @@ const AllCampaign = () => {
     };
     // Sign and send the transaction
 
-    setLoading(true);
+    setLoadingStates((prev) => ({
+      ...prev,
+      [id]: true,
+    }));
     try {
       const transactionHash = await connection?.signAndSendTransaction(
         account,
@@ -149,12 +170,18 @@ const AllCampaign = () => {
       toast.success(`Campaign completed", ${transactionHash}`);
       const result = await fetchCampaign();
       dispatch(setAllCampaigns(result));
-      setLoading(false);
+      setLoadingStates((prev) => ({
+        ...prev,
+        [id]: false,
+      }));
       return transactionHash;
     } catch (error) {
       console.error("Error completing campaign:", error);
       toast.error("Error completing campaign. Please try again.");
-      setLoading(false);
+      setLoadingStates((prev) => ({
+        ...prev,
+        [id]: false,
+      }));
       throw error;
     }
   };
@@ -193,12 +220,18 @@ const AllCampaign = () => {
       toast.success(`Mint Successful", ${transactionHash}`);
       const result = await fetchCampaign();
       dispatch(setAllCampaigns(result));
-      setLoading(false);
+      setLoadingStates((prev) => ({
+        ...prev,
+        [id]: false,
+      }));
       return transactionHash;
     } catch (error) {
       console.error("Error minting NFT:", error);
       toast.error("Error completing campaign. Please try again.");
-      setLoading(false);
+      setLoadingStates((prev) => ({
+        ...prev,
+        [id]: false,
+      }));
       throw error;
     }
   };
@@ -216,7 +249,10 @@ const AllCampaign = () => {
 
     // Sign and send the transaction
 
-    setLoading(true);
+    setLoadingStates((prev) => ({
+      ...prev,
+      [id]: true,
+    }));
 
     try {
       const transactionHash = await connection?.signAndSendTransaction(
@@ -240,7 +276,10 @@ const AllCampaign = () => {
     } catch (error) {
       console.error("Error completing campaign:", error);
       toast.error("Mint rejected");
-      setLoading(false);
+      setLoadingStates((prev) => ({
+        ...prev,
+        [id]: false,
+      }));
       throw error;
     }
   };
@@ -271,10 +310,16 @@ const AllCampaign = () => {
 
       toast.success(`Authorization Successful, ${transactionHash}`);
       transactionHash && (await fetchCampaign());
-      setLoading(false);
+      setLoadingStates((prev) => ({
+        ...prev,
+        [id]: false,
+      }));
       return transactionHash;
     } catch (error) {
-      setLoading(false);
+      setLoadingStates((prev) => ({
+        ...prev,
+        [id]: false,
+      }));
       toast.error("Failed to authorize.");
       throw error;
     }
@@ -282,7 +327,11 @@ const AllCampaign = () => {
 
   const handleAuthorize = useCallback(
     async (nationality, lower, upper, id) => {
-      setLoading(true);
+      // setLoading(true);
+      setLoadingStates((prev) => ({
+        ...prev,
+        [id]: true,
+      }));
       try {
         const statement = [
           {
@@ -326,8 +375,10 @@ const AllCampaign = () => {
         }
       } catch (error) {
         console.error("Authorization failed:", error);
-        setLoading(false);
-
+        setLoadingStates((prev) => ({
+          ...prev,
+          [id]: false,
+        }));
         toast.error("Authorization failed: " + error.message);
       }
     },
@@ -430,7 +481,7 @@ const AllCampaign = () => {
                           <p>{task}</p>
                         </div>
 
-                        {item.campaign?.tasks?.answers.length == 0 && (
+                        {item.completed === false && (
                           <input
                             type="text"
                             className="border border-black outline-none bg-transparent px-2 py-2 rounded-md w-[40%]"
@@ -450,21 +501,34 @@ const AllCampaign = () => {
                         )}
                       </div>
                     ))}
-                    {item.campaign?.tasks?.answers.length > 0 && (
+                    {item.completed === true && (
                       <div>
                         <p className="font-semibol text-primary text-[20px] mb-1 mt-6">
                           Answers
                         </p>
-                        {item.campaign?.tasks?.answers.map((answer, index2) => (
-                          <div key={index2}>
-                            {answer[1].map((a, a_index) => (
-                              <div key={a_index} className="flex gap-2">
-                                <p>{a_index + 1}.</p>
-                                <p>{a}</p>
-                              </div>
-                            ))}
-                          </div>
-                        ))}
+                        {item.campaign?.tasks?.answers ? (
+                          (() => {
+                            const userAnswers = getAnswersForAddress(
+                              item.campaign.tasks.answers,
+                              account
+                            );
+                            return userAnswers ? (
+                              userAnswers.map((answer, answerIndex) => (
+                                <div key={answerIndex} className="flex gap-2">
+                                  <p>{answerIndex + 1}.</p>
+                                  <p>{answer}</p>
+                                </div>
+                              ))
+                            ) : (
+                              <p>
+                                No answers found for this address in this
+                                campaign
+                              </p>
+                            );
+                          })()
+                        ) : (
+                          <p>No answers available for this campaign</p>
+                        )}
                       </div>
                     )}
                   </div>
@@ -485,7 +549,8 @@ const AllCampaign = () => {
                   {item.completed === false ? (
                     item.authorized === true ? (
                       <Button
-                        isLoading={loading}
+                        // isLoading={loading}
+                        isLoading={loadingStates[item.campaign.id] || false}
                         type="button"
                         name="Complete campaign"
                         onClick={() => {
@@ -510,9 +575,7 @@ const AllCampaign = () => {
                       <Button
                         name="Participate"
                         type="button"
-                        isLoading={loading}
-                        // className="border border-lightBlue px-2 py-2 text-lightBlue rounded-md"
-                        // onClick={() => completeCampaign(item.campaign.id)}
+                        isLoading={loadingStates[item.campaign.id] || false}
                         onClick={async () => {
                           await handleAuthorize(
                             item.campaign.nationality,
@@ -529,7 +592,7 @@ const AllCampaign = () => {
                       {item.minted === false && (
                         <Button
                           name="Mint Nft"
-                          isLoading={loading}
+                          isLoading={loadingStates[item.campaign.id] || false}
                           // className="border border-lightBlue px-2 py-2 text-lightBlue rounded-md"
                           onClick={async () => {
                             await mintNft(item.campaign.id);
