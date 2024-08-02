@@ -52,14 +52,20 @@ const AllCampaign = () => {
 
   useEffect(() => {
     const initialValues = {};
-    allcamp &&
-      allcamp?.forEach((item) => {
-        if (item.campaign?.tasks?.tasks) {
+    if (Array.isArray(allcamp)) {
+      allcamp.forEach((item) => {
+        if (
+          item?.campaign?.tasks?.tasks &&
+          Array.isArray(item.campaign.tasks.tasks)
+        ) {
           initialValues[Number(item.campaign.id)] = new Array(
             item.campaign.tasks.tasks.length
           ).fill("");
         }
       });
+    } else {
+      console.warn("allcamp is not an array:", allcamp);
+    }
     setInputValuesMap(initialValues);
   }, [allcamp]);
 
