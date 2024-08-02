@@ -128,6 +128,7 @@ const AllCampaign = () => {
     };
     // Sign and send the transaction
 
+    setLoading(true);
     try {
       const transactionHash = await connection?.signAndSendTransaction(
         account,
@@ -148,10 +149,12 @@ const AllCampaign = () => {
       toast.success(`Campaign completed", ${transactionHash}`);
       const result = await fetchCampaign();
       dispatch(setAllCampaigns(result));
+      setLoading(false);
       return transactionHash;
     } catch (error) {
       console.error("Error completing campaign:", error);
       toast.error("Error completing campaign. Please try again.");
+      setLoading(false);
       throw error;
     }
   };
@@ -190,10 +193,12 @@ const AllCampaign = () => {
       toast.success(`Mint Successful", ${transactionHash}`);
       const result = await fetchCampaign();
       dispatch(setAllCampaigns(result));
+      setLoading(false);
       return transactionHash;
     } catch (error) {
       console.error("Error minting NFT:", error);
       toast.error("Error completing campaign. Please try again.");
+      setLoading(false);
       throw error;
     }
   };
@@ -210,6 +215,8 @@ const AllCampaign = () => {
     };
 
     // Sign and send the transaction
+
+    setLoading(true);
 
     try {
       const transactionHash = await connection?.signAndSendTransaction(
@@ -233,6 +240,7 @@ const AllCampaign = () => {
     } catch (error) {
       console.error("Error completing campaign:", error);
       toast.error("Mint rejected");
+      setLoading(false);
       throw error;
     }
   };
@@ -318,6 +326,8 @@ const AllCampaign = () => {
         }
       } catch (error) {
         console.error("Authorization failed:", error);
+        setLoading(false);
+
         toast.error("Authorization failed: " + error.message);
       }
     },
@@ -474,8 +484,10 @@ const AllCampaign = () => {
                   </div>
                   {item.completed === false ? (
                     item.authorized === true ? (
-                      <p
-                        className="border border-lightBlue px-2 py-2 text-lightBlue rounded-md"
+                      <Button
+                        isLoading={loading}
+                        type="button"
+                        name="Complete campaign"
                         onClick={() => {
                           console.log(inputValuesMap[`${item.campaign.id}`]);
 
@@ -493,9 +505,7 @@ const AllCampaign = () => {
                             toast.info("Complete all answers");
                           }
                         }}
-                      >
-                        Complete campaign
-                      </p>
+                      />
                     ) : (
                       <Button
                         name="Participate"
@@ -515,19 +525,19 @@ const AllCampaign = () => {
                       />
                     )
                   ) : (
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 items-center">
                       {item.minted === false && (
-                        <p
-                          className="border border-lightBlue px-2 py-2 text-lightBlue rounded-md"
+                        <Button
+                          name="Mint Nft"
+                          isLoading={loading}
+                          // className="border border-lightBlue px-2 py-2 text-lightBlue rounded-md"
                           onClick={async () => {
                             await mintNft(item.campaign.id);
                             await fetchCampaign();
                           }}
-                        >
-                          Mint NFT
-                        </p>
+                        />
                       )}
-                      <p className="border border-gray-400 px-2 py-2 text-gray-400 rounded-md">
+                      <p className="border border-gray-400 px-2 py-1 text-gray-400 rounded-md">
                         Completed
                       </p>
                     </div>
