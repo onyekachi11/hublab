@@ -7,7 +7,7 @@ const {
 export async function initContract(rpc, index) {
   console.debug(`Refreshing info for contract ${index.toString()}`);
   const info = await rpc?.getInstanceInfo(ContractAddress.create(index, 0));
-  console.log(info);
+  console.log("Contract fecthed");
   // setContract(info);
   if (!info) {
     throw new Error(`contract ${index} not found`);

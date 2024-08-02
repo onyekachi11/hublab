@@ -204,7 +204,7 @@ const Details = () => {
               <p className="font-medium text-[#303036] mb-3"> Describe to-do</p>
               <div className="flex gap-2 flex-wrap">
                 {tasks.map((task, index) => (
-                  <div className="flex gap-1 ">
+                  <div key={index} className="flex gap-1 ">
                     <span>
                       {"("}
                       {index + 1}.{")"}

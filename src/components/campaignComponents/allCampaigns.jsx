@@ -2,10 +2,12 @@ import Image from "next/image";
 import { Button } from "@/components";
 import { useWallet } from "@/context";
 import {
+  AccountAddress,
   AccountTransactionType,
   CcdAmount,
   ContractAddress,
   ContractName,
+  deserializeReceiveReturnValue,
   Energy,
   EntrypointName,
   ReceiveName,
@@ -34,6 +36,8 @@ const AllCampaign = () => {
   const [inputValues, setInputValues] = useState([]);
   const [inputValuesMap, setInputValuesMap] = useState({});
   const [authToken, setAuthToken] = useState("");
+  const [loading, setLoading] = useState(null);
+
   const {
     connection,
     contract,
@@ -41,52 +45,13 @@ const AllCampaign = () => {
     account,
     rpc,
     campaignsLoading,
-    setCampaignsloading,
     // campaigns,
-    fetchCampaign,
+    // fetchCampaign,
     // allcamp,
   } = useWallet();
   const dispatch = useDispatch();
 
   const allCamp = useSelector((state) => state.generalStates.allCampaigns);
-  const allCamp2 = useSelector((state) => state.generalStates);
-
-  console.log(allCamp2);
-
-  // console.log(allcamp);
-
-  // useEffect(() => {
-  //   const initialValues = {};
-
-  //   if (Array.isArray(allcamp)) {
-  //     allcamp.forEach((item) => {
-  //       if (
-  //         item?.campaign?.tasks?.tasks &&
-  //         Array.isArray(item.campaign.tasks.tasks)
-  //       ) {
-  //         initialValues[Number(item.campaign.id)] = new Array(
-  //           item.campaign.tasks.tasks.length
-  //         ).fill("");
-  //       }
-  //     });
-  //   } else {
-  //     console.warn("allcamp is not an array:", allcamp);
-  //   }
-  //   setInputValuesMap(initialValues);
-  // }, [allcamp]);
-
-  // useEffect(() => {
-  //   const initialValues = {};
-  //   allcamp &&
-  //     allcamp?.forEach((item) => {
-  //       if (item.campaign?.tasks?.tasks) {
-  //         initialValues[Number(item.campaign.id)] = new Array(
-  //           item.campaign.tasks.tasks.length
-  //         ).fill("");
-  //       }
-  //     });
-  //   setInputValuesMap(initialValues);
-  // }, [allcamp]);
 
   useEffect(() => {
     const initialValues = {};
@@ -116,8 +81,9 @@ const AllCampaign = () => {
             DEFAULT_NFT_CONTRACT_INDEX
           );
           setNftContract(contractInstance);
+          console.log("Nft contract fetched");
         } catch (error) {
-          toast.error("error initializing Nft contract", error);
+          toast.error("Error initializing Nft contract", error);
           console.error("Error initializing Nft contract:", error);
         }
       }
@@ -125,8 +91,6 @@ const AllCampaign = () => {
 
     initializeNftContract();
   }, [rpc]);
-
-  // console.log(nftContract);
 
   useEffect(() => {
     const getSchema = async () => {
@@ -245,7 +209,6 @@ const AllCampaign = () => {
       schema: moduleSchemaFromBase64(moduleNftSchemaBase64Embedded),
     };
 
-    console.log(params);
     // Sign and send the transaction
 
     try {
@@ -299,9 +262,11 @@ const AllCampaign = () => {
       );
 
       toast.success(`Authorization Successful, ${transactionHash}`);
-      await fetchCampaign();
+      transactionHash && (await fetchCampaign());
+      setLoading(false);
       return transactionHash;
     } catch (error) {
+      setLoading(false);
       toast.error("Failed to authorize.");
       throw error;
     }
@@ -309,6 +274,7 @@ const AllCampaign = () => {
 
   const handleAuthorize = useCallback(
     async (nationality, lower, upper, id) => {
+      setLoading(true);
       try {
         const statement = [
           {
@@ -358,9 +324,68 @@ const AllCampaign = () => {
     [account, authorizeCampaign, fetchCampaign]
   );
 
+  async function fetchCampaign() {
+    // setCampaignsloading(true);
+    try {
+      const method =
+        contract &&
+        ReceiveName?.create(
+          contract?.name,
+          EntrypointName?.fromString("get_campaigns")
+        );
+
+      //invoke contract state
+      const result =
+        contract &&
+        (await rpc?.invokeContract({
+          contract: contract && ContractAddress?.create(contract?.index, 0),
+          method,
+          invoker: account && AccountAddress?.fromJSON(account),
+        }));
+
+      const buffer =
+        contract && Buffer.from(result?.returnValue?.buffer)?.buffer;
+
+      const contract_schema =
+        rpc &&
+        contract &&
+        (await getEmbeddedSchema(rpc, contract?.sourceModule));
+
+      const names = contract && ContractName?.fromString("Campaign_contract");
+      const entry = contract && EntrypointName?.fromString("get_campaigns");
+
+      const values =
+        contract &&
+        deserializeReceiveReturnValue(
+          buffer,
+          contract_schema,
+          names,
+          entry,
+          SchemaVersion?.V1
+        );
+
+      console.log(values);
+
+      // Dispatch the action to update the Redux store
+      values
+        ? dispatch(setAllCampaigns(values))
+        : dispatch(setAllCampaigns([]));
+
+      // Force a re-render by updating a local state
+      // setCampaignsloading(false);
+
+      // Return the values in case you need them
+      return values;
+    } catch (error) {
+      console.error("Error fetching contract data:", error);
+      // setCampaignsloading(false);
+      throw error;
+    }
+  }
+
   useEffect(() => {
     fetchCampaign();
-  }, [account]);
+  }, []);
 
   return (
     <div className="w-full p-3 my-4 rounded-lg">
@@ -472,8 +497,11 @@ const AllCampaign = () => {
                         Complete campaign
                       </p>
                     ) : (
-                      <p
-                        className="border border-lightBlue px-2 py-2 text-lightBlue rounded-md"
+                      <Button
+                        name="Participate"
+                        type="button"
+                        isLoading={loading}
+                        // className="border border-lightBlue px-2 py-2 text-lightBlue rounded-md"
                         // onClick={() => completeCampaign(item.campaign.id)}
                         onClick={async () => {
                           await handleAuthorize(
@@ -484,9 +512,7 @@ const AllCampaign = () => {
                           );
                           await fetchCampaign();
                         }}
-                      >
-                        Participate
-                      </p>
+                      />
                     )
                   ) : (
                     <div className="flex gap-2">

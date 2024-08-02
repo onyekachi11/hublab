@@ -11,13 +11,10 @@ const Campaign = () => {
   const [schema, setSchema] = useState();
   // const [campaigns, setCampaigns] = useState();
   const searchParams = useSearchParams();
-  const { rpc, account, contract, fetchCampaign } = useWallet();
 
   const tab = searchParams.get("tab") || "start";
 
   const router = useRouter();
-
-  console.log(contract);
 
   useEffect(() => {
     router.push(`/dashboard/campaign?tab=all_campaign`);

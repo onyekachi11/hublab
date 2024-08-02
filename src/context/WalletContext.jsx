@@ -130,7 +130,6 @@ export const WalletProvider = ({ children, walletProps }) => {
       const buffer =
         contract && Buffer.from(result?.returnValue?.buffer)?.buffer;
 
-      console.log(buffer);
       const contract_schema =
         rpc &&
         contract &&
@@ -167,6 +166,10 @@ export const WalletProvider = ({ children, walletProps }) => {
       throw error;
     }
   }
+
+  useEffect(() => {
+    fetchCampaign();
+  }, [account]);
 
   return (
     <WalletContext.Provider
