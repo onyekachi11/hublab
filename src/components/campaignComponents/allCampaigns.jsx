@@ -44,18 +44,56 @@ const AllCampaign = () => {
     setCampaignsloading,
     // campaigns,
     fetchCampaign,
-    allcamp,
+    // allcamp,
   } = useWallet();
   const dispatch = useDispatch();
 
-  // const allcamp = useSelector((state) => state.generalStates.allCampaigns);
+  const allCamp = useSelector((state) => state.generalStates.allCampaigns);
+  const allCamp2 = useSelector((state) => state.generalStates);
+
+  console.log(allCamp2);
+
+  // console.log(allcamp);
+
+  // useEffect(() => {
+  //   const initialValues = {};
+
+  //   if (Array.isArray(allcamp)) {
+  //     allcamp.forEach((item) => {
+  //       if (
+  //         item?.campaign?.tasks?.tasks &&
+  //         Array.isArray(item.campaign.tasks.tasks)
+  //       ) {
+  //         initialValues[Number(item.campaign.id)] = new Array(
+  //           item.campaign.tasks.tasks.length
+  //         ).fill("");
+  //       }
+  //     });
+  //   } else {
+  //     console.warn("allcamp is not an array:", allcamp);
+  //   }
+  //   setInputValuesMap(initialValues);
+  // }, [allcamp]);
+
+  // useEffect(() => {
+  //   const initialValues = {};
+  //   allcamp &&
+  //     allcamp?.forEach((item) => {
+  //       if (item.campaign?.tasks?.tasks) {
+  //         initialValues[Number(item.campaign.id)] = new Array(
+  //           item.campaign.tasks.tasks.length
+  //         ).fill("");
+  //       }
+  //     });
+  //   setInputValuesMap(initialValues);
+  // }, [allcamp]);
 
   useEffect(() => {
     const initialValues = {};
-    if (Array.isArray(allcamp)) {
-      allcamp.forEach((item) => {
+    if (Array.isArray(allCamp)) {
+      allCamp.forEach((item) => {
         if (
-          item?.campaign?.tasks?.tasks &&
+          item.campaign?.tasks?.tasks &&
           Array.isArray(item.campaign.tasks.tasks)
         ) {
           initialValues[Number(item.campaign.id)] = new Array(
@@ -64,10 +102,10 @@ const AllCampaign = () => {
         }
       });
     } else {
-      console.warn("allcamp is not an array:", allcamp);
+      console.warn("allCamp is not an array:", allCamp);
     }
     setInputValuesMap(initialValues);
-  }, [allcamp]);
+  }, [allCamp]);
 
   useEffect(() => {
     const initializeNftContract = async () => {
@@ -79,8 +117,8 @@ const AllCampaign = () => {
           );
           setNftContract(contractInstance);
         } catch (error) {
-          toast.error("error initializing contract", error);
-          console.error("Error initializing contract:", error);
+          toast.error("error initializing Nft contract", error);
+          console.error("Error initializing Nft contract:", error);
         }
       }
     };
@@ -326,9 +364,9 @@ const AllCampaign = () => {
 
   return (
     <div className="w-full p-3 my-4 rounded-lg">
-      {account && allcamp && allcamp?.length > 0 ? (
+      {account && allCamp && allCamp?.length > 0 ? (
         <section className="flex flex-col gap-4">
-          {allcamp?.map((item, index) => {
+          {allCamp?.map((item, index) => {
             return (
               <div
                 key={index}

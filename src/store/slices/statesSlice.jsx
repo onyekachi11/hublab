@@ -11,7 +11,7 @@ const initialState = {
   totalCampaignPoint: {},
   choosePoint: 0,
   actionModal: false,
-  allCampaigns: {},
+  allCampaigns: [],
   selectedProductImage: {},
   userCollectionNFTOBJ: {},
 };

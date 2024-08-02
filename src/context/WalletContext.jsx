@@ -119,18 +119,22 @@ export const WalletProvider = ({ children, walletProps }) => {
         );
 
       //invoke contract state
-      const result = await rpc?.invokeContract({
-        contract: contract && ContractAddress?.create(contract?.index, 0),
-        method,
-        invoker: account && AccountAddress?.fromJSON(account),
-      });
+      const result =
+        contract &&
+        (await rpc?.invokeContract({
+          contract: contract && ContractAddress?.create(contract?.index, 0),
+          method,
+          invoker: account && AccountAddress?.fromJSON(account),
+        }));
 
       const buffer =
         contract && Buffer.from(result?.returnValue?.buffer)?.buffer;
 
       console.log(buffer);
       const contract_schema =
-        rpc && (await getEmbeddedSchema(rpc, contract?.sourceModule));
+        rpc &&
+        contract &&
+        (await getEmbeddedSchema(rpc, contract?.sourceModule));
 
       const names = contract && ContractName?.fromString("Campaign_contract");
       const entry = contract && EntrypointName?.fromString("get_campaigns");
@@ -148,7 +152,9 @@ export const WalletProvider = ({ children, walletProps }) => {
       console.log(values);
 
       // Dispatch the action to update the Redux store
-      dispatch(setAllCampaigns(values));
+      values
+        ? dispatch(setAllCampaigns(values))
+        : dispatch(setAllCampaigns([]));
 
       // Force a re-render by updating a local state
       setCampaignsloading(false);

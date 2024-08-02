@@ -3,6 +3,7 @@ import Image from "next/image";
 import SignOut from "../assets/SignOut.svg";
 import { useRouter } from "next/navigation";
 import { useWallet } from "@/context";
+import { persistor } from "@/store/store";
 
 const LogoutButton = () => {
   const router = useRouter();
@@ -10,9 +11,19 @@ const LogoutButton = () => {
   const { connection, account } = useWallet();
 
   const handleLogout = async () => {
+    persistor.purge();
     console.log(connection?.disconnect());
+
     return connection?.disconnect();
   };
+
+  // const handleLogout = () => {
+  //   onDisconnect();
+  //   // dispatch(resetState());
+  //   persistor.purge();
+  //   router.push("/");
+  // };
+
   if (!account) return null;
   return (
     <div
