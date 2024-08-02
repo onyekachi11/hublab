@@ -18,6 +18,7 @@ import {
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setAllCampaigns } from "@/store/slices/statesSlice";
+import { Buffer } from "buffer/";
 
 const WalletContext = createContext();
 
@@ -73,7 +74,6 @@ export const WalletProvider = ({ children, walletProps }) => {
             DEFAULT_CONTRACT_INDEX
           );
           setContract(contractInstance);
-          await fetchCampaign();
         } catch (error) {
           console.error("Error initializing contract:", error);
         }
@@ -111,34 +111,39 @@ export const WalletProvider = ({ children, walletProps }) => {
   async function fetchCampaign() {
     setCampaignsloading(true);
     try {
-      const method = ReceiveName?.create(
-        contract?.name,
-        EntrypointName?.fromString("get_campaigns")
-      );
+      const method =
+        contract &&
+        ReceiveName?.create(
+          contract?.name,
+          EntrypointName?.fromString("get_campaigns")
+        );
 
       //invoke contract state
       const result = await rpc?.invokeContract({
-        contract: ContractAddress?.create(contract?.index, 0),
+        contract: contract && ContractAddress?.create(contract?.index, 0),
         method,
-        invoker: AccountAddress?.fromJSON(account),
+        invoker: account && AccountAddress?.fromJSON(account),
       });
 
-      const buffer = Buffer.from(result?.returnValue?.buffer).buffer;
-      const contract_schema = await getEmbeddedSchema(
-        rpc,
-        contract?.sourceModule
-      );
+      const buffer =
+        contract && Buffer.from(result?.returnValue?.buffer)?.buffer;
 
-      const names = ContractName?.fromString("Campaign_contract");
-      const entry = EntrypointName?.fromString("get_campaigns");
+      console.log(buffer);
+      const contract_schema =
+        rpc && (await getEmbeddedSchema(rpc, contract?.sourceModule));
 
-      const values = deserializeReceiveReturnValue(
-        buffer,
-        contract_schema,
-        names,
-        entry,
-        SchemaVersion?.V1
-      );
+      const names = contract && ContractName?.fromString("Campaign_contract");
+      const entry = contract && EntrypointName?.fromString("get_campaigns");
+
+      const values =
+        contract &&
+        deserializeReceiveReturnValue(
+          buffer,
+          contract_schema,
+          names,
+          entry,
+          SchemaVersion?.V1
+        );
 
       console.log(values);
 
@@ -157,9 +162,6 @@ export const WalletProvider = ({ children, walletProps }) => {
     }
   }
 
-  // useEffect(() => {
-  //   fetchCampaign();
-  // }, []);
   return (
     <WalletContext.Provider
       value={{

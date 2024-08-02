@@ -315,11 +315,11 @@ const AllCampaign = () => {
 
   useEffect(() => {
     fetchCampaign();
-  }, []);
+  }, [account]);
 
   return (
     <div className="w-full p-3 my-4 rounded-lg">
-      {allcamp && allcamp?.length > 0 ? (
+      {account && allcamp && allcamp?.length > 0 ? (
         <section className="flex flex-col gap-4">
           {allcamp?.map((item, index) => {
             return (

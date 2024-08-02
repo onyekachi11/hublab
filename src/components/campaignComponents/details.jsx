@@ -21,8 +21,6 @@ import {
 } from "@/config";
 import { useWallet } from "@/context";
 import { moduleSchemaFromBase64 } from "@concordium/react-components";
-import { initContract } from "@/utils/initCotract";
-import { getEmbeddedSchema } from "@/utils/getEmbededSchema";
 import { ArrowLeft } from "iconsax-react";
 import { useRouter } from "next/navigation";
 import * as Yup from "yup";
@@ -31,9 +29,7 @@ import { toast } from "react-toastify";
 import Info from "../../assets/info.png";
 
 const Details = () => {
-  const [selectedImage, setSelectedImage] = useState(null);
   const [selectedOption, setSelectedOption] = useState(null);
-  const [taskField, setTaskField] = useState(null);
   const [tasks, setTask] = useState([]);
 
   const {
