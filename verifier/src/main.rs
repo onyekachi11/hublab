@@ -76,7 +76,7 @@ async fn main() -> anyhow::Result<()> {
     let challenge_state = state.clone();
 
     let cors = warp::cors()
-        .allow_any_origin()
+        .allow_any_origin("https://hublab-jen1.vercel.app")
         .allow_header("Content-Type")
         .allow_method("POST");
 
