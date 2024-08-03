@@ -151,9 +151,7 @@ export const WalletProvider = ({ children, walletProps }) => {
       console.log(values);
 
       // Dispatch the action to update the Redux store
-      values
-        ? dispatch(setAllCampaigns(values))
-        : dispatch(setAllCampaigns([]));
+      values !== null && dispatch(setAllCampaigns(values));
 
       // Force a re-render by updating a local state
       setCampaignsloading(false);
@@ -166,6 +164,45 @@ export const WalletProvider = ({ children, walletProps }) => {
       throw error;
     }
   }
+
+  function useContractPolling(pollingInterval = 5000) {
+    const [contractState, setContractState] = useState([]);
+    const [isPolling, setIsPolling] = useState(true);
+
+    useEffect(() => {
+      let timeoutId;
+
+      const pollContract = async () => {
+        if (!isPolling) return;
+
+        try {
+          console.log("fetching state");
+          const newState = await fetchCampaign();
+          setContractState(newState);
+          console.log(newState);
+        } catch (error) {
+          console.error("Error fetching campaign:", error);
+        }
+
+        // Schedule the next poll after this one completes
+        timeoutId = setTimeout(pollContract, pollingInterval);
+      };
+
+      if (contract) {
+        pollContract(); // Initial fetch
+      }
+
+      return () => {
+        setIsPolling(false);
+        if (timeoutId) clearTimeout(timeoutId);
+      };
+    }, []);
+
+    return contractState;
+  }
+
+  const state = useContractPolling();
+  console.log(state);
 
   useEffect(() => {
     fetchCampaign();

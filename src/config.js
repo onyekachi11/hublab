@@ -9,7 +9,8 @@ export const DEFAULT_CONTRACT_INDEX = BigInt(9739);
 export const DEFAULT_NFT_CONTRACT_INDEX = BigInt(9705);
 export const MAX_CONTRACT_EXECUTION_ENERGY = BigInt(30000);
 export const PING_INTERVAL_MS = 5000;
-export const VERIFIER_URL = "http://127.0.0.1:8100/api";
+// export const VERIFIER_URL = "http://127.0.0.1:8100/api";
+export const VERIFIER_URL = "https://hublab-jen1.vercel.app/api";
 
 const WALLET_CONNECT_OPTS = {
   projectId: CONCORDIUM_WALLET_CONNECT_PROJECT_ID,

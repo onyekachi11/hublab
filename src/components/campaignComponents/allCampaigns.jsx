@@ -446,7 +446,7 @@ const AllCampaign = () => {
 
   useEffect(() => {
     fetchCampaign();
-  }, []);
+  }, [account, contract]);
 
   return (
     <div className="w-full p-3 my-4 rounded-lg">
