@@ -46,7 +46,7 @@ const AllCampaign = () => {
     rpc,
     campaignsLoading,
     // campaigns,
-    // fetchCampaign,
+    fetchCampaign,
     // allcamp,
   } = useWallet();
   const dispatch = useDispatch();
@@ -136,6 +136,18 @@ const AllCampaign = () => {
     }
   }, [account]);
 
+  const handleFetchCampaign = async (id) => {
+    setTimeout(async () => {
+      const result = await fetchCampaign();
+      console.log(result);
+      dispatch(setAllCampaigns(result));
+      setLoadingStates((prev) => ({
+        ...prev,
+        [id]: false,
+      }));
+    }, 10000);
+  };
+
   const completeCampaign = async (id) => {
     const params = {
       parameters: {
@@ -168,12 +180,14 @@ const AllCampaign = () => {
         params
       );
       toast.success(`Campaign completed", ${transactionHash}`);
-      const result = await fetchCampaign();
-      dispatch(setAllCampaigns(result));
-      setLoadingStates((prev) => ({
-        ...prev,
-        [id]: false,
-      }));
+      // const result = await fetchCampaign();
+      // console.log(result);
+      // dispatch(setAllCampaigns(result));
+      // setLoadingStates((prev) => ({
+      //   ...prev,
+      //   [id]: false,
+      // }));
+      await handleFetchCampaign(id);
       return transactionHash;
     } catch (error) {
       console.error("Error completing campaign:", error);
@@ -218,12 +232,7 @@ const AllCampaign = () => {
         params
       );
       toast.success(`Mint Successful", ${transactionHash}`);
-      const result = await fetchCampaign();
-      dispatch(setAllCampaigns(result));
-      setLoadingStates((prev) => ({
-        ...prev,
-        [id]: false,
-      }));
+      await handleFetchCampaign(id);
       return transactionHash;
     } catch (error) {
       console.error("Error minting NFT:", error);
@@ -309,11 +318,10 @@ const AllCampaign = () => {
       );
 
       toast.success(`Authorization Successful, ${transactionHash}`);
-      transactionHash && (await fetchCampaign());
-      setLoadingStates((prev) => ({
-        ...prev,
-        [id]: false,
-      }));
+      // transactionHash && (await handleFetchCampaign(id));
+      // setTimeout(async () => {
+      await handleFetchCampaign(id);
+      // }, 5000);
       return transactionHash;
     } catch (error) {
       setLoadingStates((prev) => ({
@@ -382,67 +390,67 @@ const AllCampaign = () => {
         toast.error("Authorization failed: " + error.message);
       }
     },
-    [account, authorizeCampaign, fetchCampaign]
+    [account]
   );
 
-  async function fetchCampaign() {
-    // setCampaignsloading(true);
-    try {
-      const method =
-        contract &&
-        ReceiveName?.create(
-          contract?.name,
-          EntrypointName?.fromString("get_campaigns")
-        );
+  // async function fetchCampaign() {
+  //   // setCampaignsloading(true);
+  //   try {
+  //     const method =
+  //       contract &&
+  //       ReceiveName?.create(
+  //         contract?.name,
+  //         EntrypointName?.fromString("get_campaigns")
+  //       );
 
-      //invoke contract state
-      const result =
-        contract &&
-        (await rpc?.invokeContract({
-          contract: contract && ContractAddress?.create(contract?.index, 0),
-          method,
-          invoker: account && AccountAddress?.fromJSON(account),
-        }));
+  //     //invoke contract state
+  //     const result =
+  //       contract &&
+  //       (await rpc?.invokeContract({
+  //         contract: contract && ContractAddress?.create(contract?.index, 0),
+  //         method,
+  //         invoker: account && AccountAddress?.fromJSON(account),
+  //       }));
 
-      const buffer =
-        contract && Buffer.from(result?.returnValue?.buffer)?.buffer;
+  //     const buffer =
+  //       contract && Buffer.from(result?.returnValue?.buffer)?.buffer;
 
-      const contract_schema =
-        rpc &&
-        contract &&
-        (await getEmbeddedSchema(rpc, contract?.sourceModule));
+  //     const contract_schema =
+  //       rpc &&
+  //       contract &&
+  //       (await getEmbeddedSchema(rpc, contract?.sourceModule));
 
-      const names = contract && ContractName?.fromString("Campaign_contract");
-      const entry = contract && EntrypointName?.fromString("get_campaigns");
+  //     const names = contract && ContractName?.fromString("Campaign_contract");
+  //     const entry = contract && EntrypointName?.fromString("get_campaigns");
 
-      const values =
-        contract &&
-        deserializeReceiveReturnValue(
-          buffer,
-          contract_schema,
-          names,
-          entry,
-          SchemaVersion?.V1
-        );
+  //     const values =
+  //       contract &&
+  //       deserializeReceiveReturnValue(
+  //         buffer,
+  //         contract_schema,
+  //         names,
+  //         entry,
+  //         SchemaVersion?.V1
+  //       );
 
-      console.log(values);
+  //     console.log(values);
 
-      // Dispatch the action to update the Redux store
-      values
-        ? dispatch(setAllCampaigns(values))
-        : dispatch(setAllCampaigns([]));
+  //     // Dispatch the action to update the Redux store
+  //     values
+  //       ? dispatch(setAllCampaigns(values))
+  //       : dispatch(setAllCampaigns([]));
 
-      // Force a re-render by updating a local state
-      // setCampaignsloading(false);
+  //     // Force a re-render by updating a local state
+  //     // setCampaignsloading(false);
 
-      // Return the values in case you need them
-      return values;
-    } catch (error) {
-      console.error("Error fetching contract data:", error);
-      // setCampaignsloading(false);
-      throw error;
-    }
-  }
+  //     // Return the values in case you need them
+  //     return values;
+  //   } catch (error) {
+  //     console.error("Error fetching contract data:", error);
+  //     // setCampaignsloading(false);
+  //     throw error;
+  //   }
+  // }
 
   useEffect(() => {
     fetchCampaign();
@@ -452,7 +460,7 @@ const AllCampaign = () => {
     <div className="w-full p-3 my-4 rounded-lg">
       {account && allCamp && allCamp?.length > 0 ? (
         <section className="flex flex-col gap-4">
-          {allCamp?.map((item, index) => {
+          {[...allCamp]?.reverse().map((item, index) => {
             return (
               <div
                 key={index}
@@ -565,7 +573,6 @@ const AllCampaign = () => {
 
                           if (allTasksAnswered) {
                             completeCampaign(item.campaign.id);
-                            // await fetchCampaign();
                           } else {
                             toast.info("Complete all answers");
                           }
@@ -583,7 +590,7 @@ const AllCampaign = () => {
                             item.campaign.age_range.upper,
                             item.campaign.id
                           );
-                          await fetchCampaign();
+                          // await fetchCampaign();
                         }}
                       />
                     )
@@ -596,7 +603,7 @@ const AllCampaign = () => {
                           // className="border border-lightBlue px-2 py-2 text-lightBlue rounded-md"
                           onClick={async () => {
                             await mintNft(item.campaign.id);
-                            await fetchCampaign();
+                            // await fetchCampaign();
                           }}
                         />
                       )}

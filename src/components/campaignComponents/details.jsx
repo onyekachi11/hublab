@@ -117,7 +117,11 @@ const Details = () => {
       )
       .then((transactionHash) => {
         toast.success(`Campaign created successfully", ${transactionHash}`);
-        fetchCampaign();
+        setTimeout(async () => {
+          const result = await fetchCampaign();
+          console.log(result);
+          dispatch(setAllCampaigns(result));
+        }, 10000);
         return transactionHash;
       })
       .catch((error) => {
