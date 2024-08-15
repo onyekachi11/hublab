@@ -53,19 +53,24 @@ const LandingPageHero = () => {
           <div className="relative h-full flex flex-col items-center justify-center text-center mx-auto gap-8 md:gap-12 px-[MIN(100px,8%)]">
             <div className="flex flex-col font-medium text-3xl md:text-6xl text-textColor leading-10 md:leading-[80px]">
               <h2>
-              Instant Tool <br className="hidden md:block" /> for anyone{" "}
-              to sell their  <br className="hidden md:block" /> digital 
+                Instant Tool <br className="hidden md:block" /> for anyone to
+                sell their <br className="hidden md:block" /> digital
                 <span className="text-[#00ADEF]"> products!</span>
               </h2>
             </div>
 
             <p className="font-normal text-lg text-[#DFDFF7]">
-              leverage verxio's on-chain commerce protocol to create, manage, and {" "}
-              <br className="hidden md:block" />distribute your digital product to your audience easily with.
+              leverage verxio's on-chain commerce protocol to create, manage,
+              and <br className="hidden md:block" />
+              distribute your digital product to your audience easily with.
             </p>
 
-            <div className="flex gap-3 items-center relative z-20">
-              <Button href="/dashboard" name="Start Selling" className={"px-12"} />
+            <div className="flex gap-3 items-center relative z-20 sm:hidden">
+              <Button
+                href="dashboard/campaign?tab=all_campaign"
+                name="Start Campaign"
+                className={"px-12"}
+              />
             </div>
           </div>
         </section>

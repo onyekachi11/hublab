@@ -39,7 +39,9 @@ const AllCampaign = () => {
   const [inputValuesMap, setInputValuesMap] = useState({});
   const [authToken, setAuthToken] = useState("");
   const [loadingStates, setLoadingStates] = useState({});
+  const [loadingNft, setLoadingNft] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [campaignsLoading, setCampaignsloading] = useState(false);
 
   const {
     connection,
@@ -47,7 +49,7 @@ const AllCampaign = () => {
     moduleSchemaBase64Embedded,
     account,
     rpc,
-    campaignsLoading,
+    // campaignsLoading,
     // campaigns,
     fetchCampaign,
     // allcamp,
@@ -94,6 +96,7 @@ const AllCampaign = () => {
   }, [allCamp]);
 
   useEffect(() => {
+    setLoadingNft(true);
     const initializeNftContract = async () => {
       if (rpc) {
         try {
@@ -103,8 +106,10 @@ const AllCampaign = () => {
           );
           setNftContract(contractInstance);
           console.log("Nft contract fetched");
+          setLoadingNft(false);
         } catch (error) {
           console.log(nftContract);
+          setLoadingNft(false);
           toast.error("Error initializing Nft contract", error);
           console.error("Error initializing Nft contract:", error);
         }
@@ -405,70 +410,17 @@ const AllCampaign = () => {
     [account]
   );
 
-  // async function fetchCampaign() {
-  //   // setCampaignsloading(true);
-  //   try {
-  //     const method =
-  //       contract &&
-  //       ReceiveName?.create(
-  //         contract?.name,
-  //         EntrypointName?.fromString("get_campaigns")
-  //       );
-
-  //     //invoke contract state
-  //     const result =
-  //       contract &&
-  //       (await rpc?.invokeContract({
-  //         contract: contract && ContractAddress?.create(contract?.index, 0),
-  //         method,
-  //         invoker: account && AccountAddress?.fromJSON(account),
-  //       }));
-
-  //     const buffer =
-  //       contract && Buffer.from(result?.returnValue?.buffer)?.buffer;
-
-  //     const contract_schema =
-  //       rpc &&
-  //       contract &&
-  //       (await getEmbeddedSchema(rpc, contract?.sourceModule));
-
-  //     const names = contract && ContractName?.fromString("Campaign_contract");
-  //     const entry = contract && EntrypointName?.fromString("get_campaigns");
-
-  //     const values =
-  //       contract &&
-  //       deserializeReceiveReturnValue(
-  //         buffer,
-  //         contract_schema,
-  //         names,
-  //         entry,
-  //         SchemaVersion?.V1
-  //       );
-
-  //     console.log(values);
-
-  //     // Dispatch the action to update the Redux store
-  //     values
-  //       ? dispatch(setAllCampaigns(values))
-  //       : dispatch(setAllCampaigns([]));
-
-  //     // Force a re-render by updating a local state
-  //     // setCampaignsloading(false);
-
-  //     // Return the values in case you need them
-  //     return values;
-  //   } catch (error) {
-  //     console.error("Error fetching contract data:", error);
-  //     // setCampaignsloading(false);
-  //     throw error;
-  //   }
-  // }
-
   useEffect(() => {
+    setCampaignsloading(true);
     fetchCampaign();
+    setCampaignsloading(false);
   }, [contract, nftContract, account]);
 
-  if (!contract && !nftContract) {
+  console.log(loadingNft);
+
+  if (loadingNft) {
+    return null;
+  } else if (!contract && !nftContract) {
     return (
       <div className="text-center mt-10 text-[17px] font-normal flex justify-center gap-2">
         <CloseCircle className="text-red-500" />

@@ -4,10 +4,12 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { SearchNormal1, Notification } from "iconsax-react";
 import { useWallet } from "@/context";
+import { Contract } from "@concordium/web-sdk";
 
 const layout = ({ children }) => {
   const router = useRouter();
-  const { account, connect, isConnecting } = useWallet();
+  const { account, connect, isConnecting, contract, fetchCampaign } =
+    useWallet();
 
   return (
     <section>
@@ -31,13 +33,14 @@ const layout = ({ children }) => {
             <p className="text-sm font-normal text-[#787887]">Notification</p>
           </blockquote>
 
-          {account ? (
+          {account && contract ? (
             <Button
               name="Create Campaign"
               onClick={() => {
                 router.push(
                   "/dashboard/campaign/create_campaign?route=details"
                 );
+                contract && fetchCampaign();
               }}
             />
           ) : (

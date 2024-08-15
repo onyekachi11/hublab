@@ -19,6 +19,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setAllCampaigns } from "@/store/slices/statesSlice";
 import { Buffer } from "buffer/";
+import { toast } from "react-toastify";
 
 const WalletContext = createContext();
 
@@ -37,7 +38,7 @@ export const WalletProvider = ({ children, walletProps }) => {
 
   const [contract, setContract] = useState(null);
   const [schema, setSchema] = useState(null);
-  const [campaignsLoading, setCampaignsloading] = useState(false);
+  // const [campaignsLoading, setCampaignsloading] = useState(false);
 
   const rpc = useGrpcClient(network);
 
@@ -75,6 +76,7 @@ export const WalletProvider = ({ children, walletProps }) => {
           );
           setContract(contractInstance);
         } catch (error) {
+          toast.error("Error initializing campaign contract");
           console.error("Error initializing contract:", error);
         }
       }
@@ -109,7 +111,7 @@ export const WalletProvider = ({ children, walletProps }) => {
   );
 
   async function fetchCampaign() {
-    setCampaignsloading(true);
+    // setCampaignsloading(true);
     try {
       const method =
         contract &&
@@ -154,7 +156,7 @@ export const WalletProvider = ({ children, walletProps }) => {
         : dispatch(setAllCampaigns([]));
 
       // Force a re-render by updating a local state
-      setCampaignsloading(false);
+      // setCampaignsloading(false);
 
       // Return the values in case you need them
       return values;
@@ -182,8 +184,8 @@ export const WalletProvider = ({ children, walletProps }) => {
         schema,
         moduleSchemaBase64Embedded,
         fetchCampaign,
-        campaignsLoading,
-        setCampaignsloading,
+        // campaignsLoading,
+        // setCampaignsloading,
         allcamp,
       }}
     >

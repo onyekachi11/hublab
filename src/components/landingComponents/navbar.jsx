@@ -60,7 +60,10 @@ const Navbar = () => {
           >
             {isOpen && (
               <div className=" relative top-[100px] flex flex-col justify-center items-center gap-4 my-6 md:hidden">
-                <Button href="/start_selling?tab=start" name="Start Selling" />
+                <Button
+                  href="dashboard/campaign?tab=all_campaign"
+                  name="Start Campaign"
+                />
               </div>
             )}
           </ul>
