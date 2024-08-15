@@ -16,6 +16,7 @@ import {
 } from "@concordium/web-sdk";
 import { MAX_CONTRACT_EXECUTION_ENERGY } from "@/config";
 import { moduleSchemaFromBase64 } from "@concordium/react-components";
+import { v4 as uuidv4, v6 as uuidv6 } from "uuid";
 import { DEFAULT_NFT_CONTRACT_INDEX, VERIFIER_URL } from "@/config";
 
 import { initContract } from "@/utils/initCotract";
@@ -28,6 +29,7 @@ import { getChallenge, authorize } from "@/utils/backendUtils";
 import { useSelector, useDispatch } from "react-redux";
 import { root } from "@/store/store";
 import { setAllCampaigns } from "@/store/slices/statesSlice";
+import { CloseCircle } from "iconsax-react";
 
 const AllCampaign = () => {
   const [nftContract, setNftContract] = useState();
@@ -37,6 +39,7 @@ const AllCampaign = () => {
   const [inputValuesMap, setInputValuesMap] = useState({});
   const [authToken, setAuthToken] = useState("");
   const [loadingStates, setLoadingStates] = useState({});
+  const [showModal, setShowModal] = useState(false);
 
   const {
     connection,
@@ -101,6 +104,7 @@ const AllCampaign = () => {
           setNftContract(contractInstance);
           console.log("Nft contract fetched");
         } catch (error) {
+          console.log(nftContract);
           toast.error("Error initializing Nft contract", error);
           console.error("Error initializing Nft contract:", error);
         }
@@ -130,11 +134,11 @@ const AllCampaign = () => {
     getSchema();
   }, [rpc, nftContract]);
 
-  useEffect(() => {
-    if (!account) {
-      toast.info("Connect your wallet");
-    }
-  }, [account]);
+  // useEffect(() => {
+  //   if (!account) {
+  //     toast.info("Connect your wallet");
+  //   }
+  // }, [account]);
 
   const handleFetchCampaign = async (id) => {
     setTimeout(async () => {
@@ -145,7 +149,7 @@ const AllCampaign = () => {
         ...prev,
         [id]: false,
       }));
-    }, 10000);
+    }, 11000);
   };
 
   const completeCampaign = async (id) => {
@@ -232,7 +236,9 @@ const AllCampaign = () => {
         params
       );
       toast.success(`Mint Successful", ${transactionHash}`);
+      setShowModal(true);
       await handleFetchCampaign(id);
+
       return transactionHash;
     } catch (error) {
       console.error("Error minting NFT:", error);
@@ -246,12 +252,18 @@ const AllCampaign = () => {
   };
 
   const mintNft = async (id) => {
+    function generateRandomTokenId() {
+      return Math.floor(10000000 + Math.random() * 90000000);
+    }
+
+    const randomTokenId = generateRandomTokenId();
+
     const params = {
       parameters: {
         owner: {
           Account: [account],
         },
-        tokens: ["00000115"],
+        tokens: [randomTokenId.toString()],
       },
       schema: moduleSchemaFromBase64(moduleNftSchemaBase64Embedded),
     };
@@ -454,12 +466,21 @@ const AllCampaign = () => {
 
   useEffect(() => {
     fetchCampaign();
-  }, [account, contract]);
+  }, [contract, nftContract, account]);
+
+  if (!contract && !nftContract) {
+    return (
+      <div className="text-center mt-10 text-[17px] font-normal flex justify-center gap-2">
+        <CloseCircle className="text-red-500" />
+        <p>failed to get contracts, please refresh...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full p-3 my-4 rounded-lg">
       {account && allCamp && allCamp?.length > 0 ? (
-        <section className="flex flex-col gap-4">
+        <section className="flex flex-col gap-4 relativ">
           {[...allCamp]?.reverse().map((item, index) => {
             return (
               <div
@@ -616,6 +637,25 @@ const AllCampaign = () => {
               </div>
             );
           })}
+
+          {showModal && (
+            <div className="border border-black absolute top-0 left-0 text-primary z-50 bg-black/50 w-full h-full flex justify-center items-center">
+              <div className=" bg-white px-10 py-10 rounded-sm ">
+                <div className="float-right mb-5">
+                  <CloseCircle size={30} onClick={() => setShowModal(false)} />
+                </div>
+                <div className="flex items-center flex-col gap-3 clear-both">
+                  <p>
+                    Import NFT with this contract index in your concordium
+                    wallet:
+                  </p>
+                  <p className="border border-lightBlue px-7 py-3 rounded-md">
+                    {Number(DEFAULT_NFT_CONTRACT_INDEX)}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
         </section>
       ) : (
         <section className="flex flex-col gap-3 items-center justify-center h-full w-full mt-8">
@@ -633,18 +673,24 @@ const AllCampaign = () => {
                 />
               </div>
 
-              <p className="text-[#0D0E32] font-medium text-2xl">
-                Oops! No campaigns yet
-              </p>
-              <p className="text-[#0D0E32] font-normal text-sm">
-                No worries, you can do something about it
-              </p>
+              {account ? (
+                <>
+                  <p className="text-[#0D0E32] font-medium text-2xl">
+                    Oops! No campaigns yet
+                  </p>
+                  <p className="text-[#0D0E32] font-normal text-sm">
+                    No worries, you can do something about it
+                  </p>
 
-              <Button
-                href={"/dashboard/campaign/create_campaign?route=details"}
-                className={"px-6"}
-                name={"Create Campaign"}
-              />
+                  <Button
+                    href={"/dashboard/campaign/create_campaign?route=details"}
+                    className={"px-6"}
+                    name={"Create Campaign"}
+                  />
+                </>
+              ) : (
+                <p>Pls connect your wallet</p>
+              )}
             </>
           )}
         </section>

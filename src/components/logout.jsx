@@ -12,17 +12,12 @@ const LogoutButton = () => {
 
   const handleLogout = async () => {
     persistor.purge();
+    persistor.purge();
     console.log(connection?.disconnect());
+    router.push("/");
 
     return connection?.disconnect();
   };
-
-  // const handleLogout = () => {
-  //   onDisconnect();
-  //   // dispatch(resetState());
-  //   persistor.purge();
-  //   router.push("/");
-  // };
 
   if (!account) return null;
   return (

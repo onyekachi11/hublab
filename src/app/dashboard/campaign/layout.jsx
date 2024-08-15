@@ -11,7 +11,7 @@ const layout = ({ children }) => {
 
   return (
     <section>
-      <div className="bg-white z-50 sticky top-0 flex items-center justify-between px-8 py-3 mb-3">
+      <div className="bg-white  z-[90] sticky top-0 flex items-center justify-between px-8 py-3 mb-3">
         <div className="relative rounded-full h-50 border w-[450px]  border-[#AEAEB7]">
           <SearchNormal1
             className="absolute left-5 top-2"
