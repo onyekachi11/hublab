@@ -404,12 +404,12 @@ const AllCampaign = () => {
   return (
     <div className="w-full p-3 my-4 rounded-lg">
       {account && allCamp && allCamp?.length > 0 ? (
-        <section className="flex flex-col gap-4 relativ">
+        <section className="flex flex-col gap-6">
           {[...allCamp]?.reverse().map((item, index) => {
             return (
               <div
                 key={index}
-                className="border border-primary rounded-lg p-3 cursor-pointer w-[100%] flex gap-3 flex-col"
+                className=" border border-gray-200 bg-white shadow-xl rounded-lg p-5 w-[100%] flex gap-3 flex-col"
               >
                 <div className=" flex justify-between ">
                   <div className="w-[70%]">
