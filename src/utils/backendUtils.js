@@ -6,7 +6,6 @@ export async function getChallenge(verifier, accountAddress) {
     `${verifier}/challenge?address=${accountAddress}`,
     { method: "get" }
   );
-  console.log(response);
   const body = await response.json();
   return body.challenge;
 }

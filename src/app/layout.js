@@ -4,7 +4,6 @@ import ReduxProvider from "@/providers/reduxProvider";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { NavProvider } from "@/context/nav_context";
-import DatePickerProvider from "@/providers/datePickerProvider";
 import ConnectWalletProvider from "@/providers/connectWalletProvider";
 const roboto_Slab = Roboto_Slab({ subsets: ["latin"] });
 
@@ -19,15 +18,13 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <link rel="icon" href="/favicon.ico" sizes="any" />
       <body className={roboto_Slab.className}>
-        <DatePickerProvider>
-          <ReduxProvider>
-            <NavProvider>
-              <ConnectWalletProvider>{children}</ConnectWalletProvider>
-              {/* {children} */}
-            </NavProvider>
-          </ReduxProvider>
-          <ToastContainer />
-        </DatePickerProvider>
+        <ReduxProvider>
+          <NavProvider>
+            <ConnectWalletProvider>{children}</ConnectWalletProvider>
+            {/* {children} */}
+          </NavProvider>
+        </ReduxProvider>
+        <ToastContainer />
       </body>
     </html>
   );

@@ -21,11 +21,11 @@ const CreateCampaign = () => {
           href="/dashboard/campaign/create_campaign?route=action"
           isActive={route === "action"}
         /> */}
-        <TabButton
+        {/* <TabButton
           name="Rewards"
           href="/dashboard/campaign/create_campaign?route=rewards"
           isActive={route === "rewards"}
-        />
+        /> */}
       </div>
 
       {route === "details" && <Details />}

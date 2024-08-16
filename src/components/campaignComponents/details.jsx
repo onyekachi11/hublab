@@ -2,7 +2,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import campaignBanner from "@/assets/campaignBanner.svg";
 import Image from "next/image";
-import UploadIcon from "../../assets/uploadIcon.svg";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Button } from "@/components";
 import country from "world_countries_lists/data/countries/_combined/countries.json";
@@ -119,7 +118,6 @@ const Details = () => {
         toast.success(`Campaign created successfully", ${transactionHash}`);
         setTimeout(async () => {
           const result = await fetchCampaign();
-          console.log(result);
           dispatch(setAllCampaigns(result));
         }, 10000);
         return transactionHash;
@@ -130,17 +128,6 @@ const Details = () => {
         throw error;
       });
   };
-
-  // useEffect(() => {
-  //   if (account && contract) {
-  //     fetchCampaign();
-  //   }
-
-  //   return () => {
-  //     // cleanup
-  //   };
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [account, contract]);
 
   return (
     <section className="w-full">
@@ -229,7 +216,6 @@ const Details = () => {
                     type="button"
                     onClick={() => {
                       tasks.push(values.task);
-                      console.log(tasks);
                       setFieldValue("allTask", tasks);
                       setFieldValue("task", "");
                     }}
@@ -309,7 +295,6 @@ const Details = () => {
                 type="submit"
                 className="w-[300px] text-base"
                 onClick={() => {
-                  console.log(values);
                   if (!account) {
                     toast.info("Connect your wallet");
                   } else if (isValid && dirty && account) {
@@ -320,9 +305,6 @@ const Details = () => {
                       values
                     );
                   }
-
-                  // .then(() => toast.success("Campaign created successfully"))
-                  // .catch((e) => toast.error(e.message));
                 }}
               />
               <Button

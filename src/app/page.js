@@ -1,21 +1,13 @@
-import {
-  Tasks,
-  HowToEarn,
-  SliderSection,
-  LandingPageHero,
-} from "@/components";
-import Navbar from "../components/landingComponents/navbar";
-import Footer from "../components/landingComponents/footer";
+"use client";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
-  return (
-    <main>
-      <Navbar />
-      <LandingPageHero />
-      {/* <HowToEarn /> */}
-      <SliderSection />
-      <Tasks />
-      <Footer />
-    </main>
-  );
+  const router = useRouter();
+  useEffect(() => {
+    // if (userId === "") {
+    router.push("/dashboard/campaign?tab=all_campaign");
+    // }
+  }, []);
+  return <main>{/* <p>hello</p> */}</main>;
 }

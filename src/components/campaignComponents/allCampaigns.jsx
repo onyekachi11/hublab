@@ -2,22 +2,17 @@ import Image from "next/image";
 import { Button } from "@/components";
 import { useWallet } from "@/context";
 import {
-  AccountAddress,
   AccountTransactionType,
   CcdAmount,
   ContractAddress,
-  ContractName,
-  deserializeReceiveReturnValue,
   Energy,
   EntrypointName,
   ReceiveName,
-  SchemaVersion,
-  statementAttributeTypeToAttributeType,
 } from "@concordium/web-sdk";
 import { MAX_CONTRACT_EXECUTION_ENERGY } from "@/config";
 import { moduleSchemaFromBase64 } from "@concordium/react-components";
-import { v4 as uuidv4, v6 as uuidv6 } from "uuid";
 import { DEFAULT_NFT_CONTRACT_INDEX, VERIFIER_URL } from "@/config";
+import empty from "../../assets/emptyStateImage.svg";
 
 import { initContract } from "@/utils/initCotract";
 import { getEmbeddedSchema } from "@/utils/getEmbededSchema";
@@ -27,7 +22,6 @@ import { detectConcordiumProvider } from "@concordium/browser-wallet-api-helpers
 import Info from "../../assets/info.png";
 import { getChallenge, authorize } from "@/utils/backendUtils";
 import { useSelector, useDispatch } from "react-redux";
-import { root } from "@/store/store";
 import { setAllCampaigns } from "@/store/slices/statesSlice";
 import { CloseCircle } from "iconsax-react";
 
@@ -49,10 +43,7 @@ const AllCampaign = () => {
     moduleSchemaBase64Embedded,
     account,
     rpc,
-    // campaignsLoading,
-    // campaigns,
     fetchCampaign,
-    // allcamp,
   } = useWallet();
   const dispatch = useDispatch();
 
@@ -108,7 +99,6 @@ const AllCampaign = () => {
           console.log("Nft contract fetched");
           setLoadingNft(false);
         } catch (error) {
-          console.log(nftContract);
           setLoadingNft(false);
           toast.error("Error initializing Nft contract", error);
           console.error("Error initializing Nft contract:", error);
@@ -139,16 +129,9 @@ const AllCampaign = () => {
     getSchema();
   }, [rpc, nftContract]);
 
-  // useEffect(() => {
-  //   if (!account) {
-  //     toast.info("Connect your wallet");
-  //   }
-  // }, [account]);
-
   const handleFetchCampaign = async (id) => {
     setTimeout(async () => {
       const result = await fetchCampaign();
-      console.log(result);
       dispatch(setAllCampaigns(result));
       setLoadingStates((prev) => ({
         ...prev,
@@ -189,13 +172,6 @@ const AllCampaign = () => {
         params
       );
       toast.success(`Campaign completed", ${transactionHash}`);
-      // const result = await fetchCampaign();
-      // console.log(result);
-      // dispatch(setAllCampaigns(result));
-      // setLoadingStates((prev) => ({
-      //   ...prev,
-      //   [id]: false,
-      // }));
       await handleFetchCampaign(id);
       return transactionHash;
     } catch (error) {
@@ -391,8 +367,6 @@ const AllCampaign = () => {
           statement
         );
 
-        console.log(newAuthToken);
-
         if (newAuthToken) {
           await authorizeCampaign(id);
         } else {
@@ -416,8 +390,6 @@ const AllCampaign = () => {
     setCampaignsloading(false);
   }, [contract, nftContract, account]);
 
-  console.log(loadingNft);
-
   if (loadingNft) {
     return null;
   } else if (!contract && !nftContract) {
@@ -439,9 +411,9 @@ const AllCampaign = () => {
                 key={index}
                 className="border border-primary rounded-lg p-3 cursor-pointer w-[100%] flex gap-3 flex-col"
               >
-                <div className=" flex justify-between">
-                  <div>
-                    <h2 className="capitalize text-primary text-2xl ">
+                <div className=" flex justify-between ">
+                  <div className="w-[70%]">
+                    <h2 className="capitalize text-primary text-2xl mb-3 ">
                       {item.campaign?.title}
                     </h2>
                     <p>{item.campaign?.description}</p>
@@ -515,7 +487,7 @@ const AllCampaign = () => {
                   </div>
                 )}
 
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between items-center gap-6">
                   <div className="flex gap-2 items-center">
                     <div className="w-[20px]">
                       <Image sizes="" src={Info} alt="Information" />
@@ -535,8 +507,6 @@ const AllCampaign = () => {
                         type="button"
                         name="Complete campaign"
                         onClick={() => {
-                          console.log(inputValuesMap[`${item.campaign.id}`]);
-
                           const taskAnswers =
                             inputValuesMap[`${item.campaign.id}`] || [];
                           const allTasksAnswered =
@@ -617,10 +587,10 @@ const AllCampaign = () => {
             <>
               <div className="border bg-white shadow-sm rounded-xl">
                 <Image
-                  src={"/images/emptyStateImage.svg"}
-                  height={300}
-                  width={300}
-                  alt="champ"
+                  src={empty}
+                  // height={300}
+                  // width={300}
+                  alt="empty data"
                   className="inline"
                 />
               </div>
