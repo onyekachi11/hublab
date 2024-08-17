@@ -13,7 +13,7 @@ const LogoutButton = () => {
   const handleLogout = async () => {
     persistor.purge();
     persistor.purge();
-    router.push("/");
+    // router.push("/");
 
     return connection?.disconnect();
   };
