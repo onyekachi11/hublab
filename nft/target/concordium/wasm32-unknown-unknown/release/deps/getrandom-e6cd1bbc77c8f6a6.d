@@ -1,0 +1,11 @@
+/Users/mac/Downloads/ccd-nft/cis2-nft/target/concordium/wasm32-unknown-unknown/release/deps/libgetrandom-e6cd1bbc77c8f6a6.rmeta: /Users/mac/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.1.16/src/lib.rs /Users/mac/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.1.16/src/error.rs /Users/mac/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.1.16/src/util.rs /Users/mac/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.1.16/src/error_impls.rs /Users/mac/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.1.16/src/dummy.rs
+
+/Users/mac/Downloads/ccd-nft/cis2-nft/target/concordium/wasm32-unknown-unknown/release/deps/libgetrandom-e6cd1bbc77c8f6a6.rlib: /Users/mac/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.1.16/src/lib.rs /Users/mac/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.1.16/src/error.rs /Users/mac/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.1.16/src/util.rs /Users/mac/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.1.16/src/error_impls.rs /Users/mac/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.1.16/src/dummy.rs
+
+/Users/mac/Downloads/ccd-nft/cis2-nft/target/concordium/wasm32-unknown-unknown/release/deps/getrandom-e6cd1bbc77c8f6a6.d: /Users/mac/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.1.16/src/lib.rs /Users/mac/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.1.16/src/error.rs /Users/mac/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.1.16/src/util.rs /Users/mac/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.1.16/src/error_impls.rs /Users/mac/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.1.16/src/dummy.rs
+
+/Users/mac/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.1.16/src/lib.rs:
+/Users/mac/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.1.16/src/error.rs:
+/Users/mac/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.1.16/src/util.rs:
+/Users/mac/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.1.16/src/error_impls.rs:
+/Users/mac/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.1.16/src/dummy.rs:

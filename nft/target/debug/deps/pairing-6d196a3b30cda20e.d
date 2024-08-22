@@ -1,0 +1,12 @@
+/Users/mac/Downloads/ccd-nft/cis2-nft/target/debug/deps/libpairing-6d196a3b30cda20e.rmeta: /Users/mac/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pairing-0.15.1/src/lib.rs /Users/mac/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pairing-0.15.1/src/bls12_381/mod.rs /Users/mac/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pairing-0.15.1/src/bls12_381/ec.rs /Users/mac/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pairing-0.15.1/src/bls12_381/fq.rs /Users/mac/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pairing-0.15.1/src/bls12_381/fq12.rs /Users/mac/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pairing-0.15.1/src/bls12_381/fq2.rs /Users/mac/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pairing-0.15.1/src/bls12_381/fq6.rs /Users/mac/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pairing-0.15.1/src/bls12_381/fr.rs
+
+/Users/mac/Downloads/ccd-nft/cis2-nft/target/debug/deps/pairing-6d196a3b30cda20e.d: /Users/mac/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pairing-0.15.1/src/lib.rs /Users/mac/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pairing-0.15.1/src/bls12_381/mod.rs /Users/mac/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pairing-0.15.1/src/bls12_381/ec.rs /Users/mac/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pairing-0.15.1/src/bls12_381/fq.rs /Users/mac/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pairing-0.15.1/src/bls12_381/fq12.rs /Users/mac/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pairing-0.15.1/src/bls12_381/fq2.rs /Users/mac/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pairing-0.15.1/src/bls12_381/fq6.rs /Users/mac/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pairing-0.15.1/src/bls12_381/fr.rs
+
+/Users/mac/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pairing-0.15.1/src/lib.rs:
+/Users/mac/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pairing-0.15.1/src/bls12_381/mod.rs:
+/Users/mac/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pairing-0.15.1/src/bls12_381/ec.rs:
+/Users/mac/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pairing-0.15.1/src/bls12_381/fq.rs:
+/Users/mac/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pairing-0.15.1/src/bls12_381/fq12.rs:
+/Users/mac/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pairing-0.15.1/src/bls12_381/fq2.rs:
+/Users/mac/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pairing-0.15.1/src/bls12_381/fq6.rs:
+/Users/mac/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pairing-0.15.1/src/bls12_381/fr.rs:
