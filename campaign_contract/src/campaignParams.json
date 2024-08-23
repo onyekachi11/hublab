@@ -1,0 +1,14 @@
+{
+    "title": "Follow my socials2",
+    "description": "Follow all my socials",
+    "nationality": [
+        "AT",
+        "BE",
+        "BG",
+        "CY"
+    ],
+    "age_range": {
+        "lower": "19571212",
+        "upper": "19971212"
+    }
+}
