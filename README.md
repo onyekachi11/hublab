@@ -1,4 +1,6 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+A web application for managing campaigns and task for users. This is was developed with the [concordium blockchain](https://www.concordium.com/), integrating the concorcium ID and NFT.
+
+Here is link to [app](https://hublab-jen1.vercel.app/)
 
 ## Getting Started
 
@@ -14,11 +16,11 @@ pnpm dev
 bun dev
 ```
 
+Running `npm run dev` starts both the localhost web and server.
+
+Edit the `config.js` file to use the localhost verifier URL for development purposes.
+
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
 ## Learn More
 
