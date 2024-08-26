@@ -1,38 +1,70 @@
-A web application for managing campaigns and task for users. This is was developed with the [concordium blockchain](https://www.concordium.com/), integrating the concorcium ID and NFT.
+# Hublab
 
-Here is link to [app](https://hublab-jen1.vercel.app/)
+Hublab is a platform designed to create incentive campaigns and quests for projects. It allows users to participate in tasks and earn rewards.
+Hublab ensures that only valid participants can join campaigns using the Concordium ID verification system and issue rewards in the form of NFTs.
+All interactions and rewards are managed and verified on the Concordium blockchain.
 
-## Getting Started
+## Table of Contents
 
-First, run the development server:
+- Features
+- Technology Stack
+- How It Works
+- Setup and Installation
+- Contributing
+- License
+
+## Features
+
+- **Incentive Campaigns**: Projects can host campaigns where users complete specific tasks to earn rewards.
+- **Participant Verification**: Validity of participants is verified using Concordium ID.
+- **NFT Rewards**: Completed tasks are rewarded with NFTs issued on the Concordium blockchain.
+- **Task Management** : Campaign tasks and their management are handled through smart contracts deployed on the Concordium blockchain.
+- **Country-Based Criteria**: Campaigns can specify participation criteria, such as country of residence.
+
+## Technology Stack
+
+- **Concordium Blockchain**: Used for participant verification, NFT issuance, and task management.
+- **Concordium ID**: Used to validate participants before they can join campaigns.
+- **Smart Contracts**: Deployed on the Concordium blockchain for managing tasks and campaigns.
+- **React**: Frontend framework for building the user interface.
+
+## How It Works
+
+- **Campaign Setup**: Projects create and deploy campaigns specifying the tasks and criteria for participation.
+- **Participant Verification**: Users must verify their Concordium ID to ensure they meet the criteria for participation.
+- **Task Completion**: Participants complete tasks as specified in the campaign.
+- **NFT Issuance**: Upon successful completion of tasks, NFTs are issued to participants as rewards. These NFTs are minted on the Concordium blockchain.
+- **Task Management**: Tasks and campaign management are handled through smart contracts deployed on the Concordium blockchain, ensuring transparency and efficiency.
+
+## Helpful Links
+
+- **Github Repo**: https://github.com/onyekachi11/hublab
+- **DEMO Video**: TBD
+- **DEMO Link**: https://hublab-jen1.vercel.app/
+
+## Setup and Installation
+
+### Clone the Repository:
+
+```bash Copy code
+
+git clone https://github.com/onyekachi11/hublab.git
+cd hublab
+
+```
+
+### Install Dependencies:
+
+```bash
+npm install
+```
+
+### Set Up Concordium Wallet
+
+Follow the Concordium Wallet API documentation to configure and connect your wallet.
+
+### Run the Application:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
-
-Running `npm run dev` starts both the localhost web and server.
-
-Edit the `config.js` file to use the localhost verifier URL for development purposes.
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
