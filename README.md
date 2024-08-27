@@ -39,7 +39,7 @@ All interactions and rewards are managed and verified on the Concordium blockcha
 ## Helpful Links
 
 - **Github Repo**: https://github.com/onyekachi11/hublab
-- **DEMO Video**: TBD
+- **DEMO Video**: https://www.loom.com/share/885959612d8d433783b860936bca0d8e?sid=632c5509-4dcc-477f-8860-c4e21c480f9f
 - **DEMO Link**: https://hublab-jen1.vercel.app/
 
 ## Setup and Installation
