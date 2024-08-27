@@ -4,15 +4,6 @@ Hublab is a platform designed to create incentive campaigns and quests for proje
 Hublab ensures that only valid participants can join campaigns using the Concordium ID verification system and issue rewards in the form of NFTs.
 All interactions and rewards are managed and verified on the Concordium blockchain.
 
-## Table of Contents
-
-- Features
-- Technology Stack
-- How It Works
-- Setup and Installation
-- Contributing
-- License
-
 ## Features
 
 - **Incentive Campaigns**: Projects can host campaigns where users complete specific tasks to earn rewards.
